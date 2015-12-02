@@ -5,11 +5,12 @@
 #-------------------------------------------------
 
 INCLUDEPATH += ../Oscillator
-SOURCES += ../Oscillator/main.cpp\
+SOURCES +=\
         ../Oscillator/mainwindow.cpp\
         ../Oscillator/oscillatorsource.cpp\
     ../Oscillator/oscillator.cpp \
-    ../Oscillator/envelope.cpp
+    ../Oscillator/envelope.cpp \
+    $$PWD/main2.cpp
 
 HEADERS  += ../Oscillator/mainwindow.h \
     ../Oscillator/oscillatorsource.h\

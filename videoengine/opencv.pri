@@ -1,6 +1,6 @@
 
 win32 {
-#  für Windows muss die Umgebungsvariable OPENCV_DIR gesetzt sein 
+#  for Windows muss die Umgebungsvariable OPENCV_DIR gesetzt sein 
 #  auf den Pfad der OpenCV-Installation
 #  Beispiel: C:\OPENCV\opencv-2.4.9\build\x86\vc12
 

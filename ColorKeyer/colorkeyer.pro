@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets multimedia
 
 
 
@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         videoplayer.cpp \
-    colorkeyer.cpp
+    colorkeyer.cpp \
+    musicchip.cpp
 
 HEADERS  += videoplayer.h \
-    colorkeyer.h
+    colorkeyer.h \
+    musicchip.h
 
 FORMS    += videoplayer.ui
 
