@@ -18,7 +18,7 @@ using namespace std;
         MusicChip chip1(MusicChip::SQUARE, 0);
         MusicChip chip2(MusicChip::SQUARE, 0);
         MusicChip chip3(MusicChip::SQUARE, 0);
-        //MusicChip chip4(MusicChip::SQUARE, 0);
+        MusicChip chip4(MusicChip::HEXAGON, 0);
 
         //werte setzen
         chip1.setHSVmin( Scalar(14, 130, 0) ); //gelb
@@ -27,14 +27,14 @@ using namespace std;
         chip2.setHSVmax( Scalar(130, 255, 255) );
         chip3.setHSVmin( Scalar(40, 20, 0) ); // gruen
         chip3.setHSVmax( Scalar(75, 255, 255) );
-        //chip4.setHSVmin( Scalar(40, 20, 0) ); // gruen
-        //chip4.setHSVmax( Scalar(75, 255, 255) );
+        chip4.setHSVmin( Scalar(109, 60, 0) ); //blau(lila)
+        chip4.setHSVmax( Scalar(130, 255, 255) );
 
         //musicchips hinzufuegen
         musicChips.push_back(chip1);
         musicChips.push_back(chip2);
         musicChips.push_back(chip3);
-        //musicChips.push_back(chip4);
+        musicChips.push_back(chip4);
 
         //vector der result Matrizen initalisieren
         //outputs.resize(numberOfMusicChips);
@@ -131,26 +131,31 @@ using namespace std;
                     if(area > MIN_OBJECT_AREA){
 
                          approxPolyDP(contours[i], approx, 0.01*arcLength(contours[i], true), true);
+                         qDebug() << approx.size();
                         if(mChip.getConture() == MusicChip::SQUARE){
                             //prüfe ob konturen zu viereck passen
                             if(approx.size() == mChip.getConture()){
                                 //setze neue Eigenschaften des erkannten Chips
                                 //musicChips[index].setCenter(moment.m10/area, moment.m01/area);
                                 //[index].setDetection(true);
-                                MusicChip c;
-                                c.setCenter(moment.m10/area, moment.m01/area);
-                                c.setDetection(true);
-                                mChipList.push_back(c);
                                 objectFound = true;
                             }
                         }
+
+                        if(objectFound){
+                            MusicChip c;
+                            c.setCenter(moment.m10/area, moment.m01/area);
+                            c.setDetection(true);
+                            mChipList.push_back(c);
+                        }
+
 
                     } else objectFound = false; //musicChips[index].setDetection(false);
                 }//end for loop
             }
         }
 
-        if( /*musicChips[index].isDetected()*/ objectFound == true){
+        if( /*musicChips[index].isDetected()*/ objectFound){
             //start music, apply filter
             //draw object location on screen
             drawMusicChip(/*musicChips[index]*/ mChipList, input, temp, contours, hierarchy);
@@ -164,7 +169,7 @@ using namespace std;
         Mat element = getStructuringElement(MORPH_RECT,Size(8,8));
 		Mat HSV;
 		Mat threshold;
-        // Mat result(input.rows, input.cols, CV_8UC1, Scalar(0,0,0));
+        Mat result(input.rows, input.cols, CV_8UC1, Scalar(0,0,0));
 
         for(int i = 0; i < musicChips.size(); i++){
            //outputs[i] = maskColor(input, musicChips[i] );
@@ -173,7 +178,7 @@ using namespace std;
 
            //maskieren
            cvtColor(input, HSV, CV_BGR2HSV);
-           medianBlur(input,input,3);
+           //medianBlur(input,input,3);
            inRange(HSV, musicChips[i].getHSVmin(), musicChips[i].getHSVmax(), threshold);
 
            //filtern : opening und closing
@@ -183,12 +188,12 @@ using namespace std;
 
 
            //tracken
-           trackMusicChip(i, musicChips[i], threshold, HSV, /*threshold*/input);
+           trackMusicChip(i, musicChips[i], threshold, HSV, threshold /*input*/);
 
-           //result = result | threshold;
+           result = result | threshold;
         }
 
-        return input; //result;
+        return result;//input; //
     }
 
     //berechne den Mittelpunkt

@@ -25,6 +25,7 @@ public:
     bool isDetected();
     //Konstanten fuer moegliche Formen auf dem MusicChip
     static const int TRIANGLE = 3;
+    static const int PENTAGON = 5;
     static const int SQUARE = 4;
     static const int HEXAGON = 6;
     static const int CIRCLE = -1;
