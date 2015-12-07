@@ -1,13 +1,15 @@
 #include "colorkeyer.h"
 #include "musicchip.h"
+#include <QDebug>
 using namespace cv;
+using namespace std;
     int H_MIN = 0;
     int H_MAX = 256;
     int S_MIN = 0;
     int S_MAX = 256;
     int V_MIN = 0;
     int V_MAX = 256;
-    const int MIN_OBJECT_AREA = 20*20;
+    const int MIN_OBJECT_AREA = 40*40;
 
     ColorKeyer::ColorKeyer() : numberOfMusicChips(0) {
 
@@ -111,12 +113,12 @@ using namespace cv;
 		vector< vector<Point> > contours;
 		vector<Vec4i> hierarchy;
 		vector<Point> approx;
-			
+        Mat contourOutput;
 		//Konturen finden
-        findContours(temp, contours, hierarchy,  /*CV_RETR_LIST*/ CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
-			
+        findContours(temp, contours, hierarchy,  CV_RETR_LIST /*CV_RETR_CCOMP*/, CV_CHAIN_APPROX_NONE/*_SIMPLE*/ );
+
 		bool objectFound = false;
-		if (hierarchy.size() > 0) {
+        if (hierarchy.size() > 0) {
 
             int numMusiChips = hierarchy.size();
             if(numMusiChips < 2) {
@@ -124,31 +126,30 @@ using namespace cv;
                 for (int i = 0; i >= 0; i = hierarchy[i][0]) {
 
                     Moments moment = moments((cv::Mat)contours[i]);
-					double area = moment.m00;
+                    double area = moment.m00;
 
                     if(area > MIN_OBJECT_AREA){
-                        /*
+
+                         approxPolyDP(contours[i], approx, 0.01*arcLength(contours[i], true), true);
                         if(mChip.getConture() == MusicChip::SQUARE){
-                            approxPolyDP(contours[i], approx, 0.01*arcLength(contours[i], true), true);
-						
                             //prüfe ob konturen zu viereck passen
                             if(approx.size() == mChip.getConture()){
                                 //setze neue Eigenschaften des erkannten Chips
-                                musicChips[index].setCenter(moment.m10/area, moment.m01/area);
-                                musicChips[index].setDetection(true);
+                                //musicChips[index].setCenter(moment.m10/area, moment.m01/area);
+                                //[index].setDetection(true);
+                                MusicChip c;
+                                c.setCenter(moment.m10/area, moment.m01/area);
+                                c.setDetection(true);
+                                mChipList.push_back(c);
+                                objectFound = true;
                             }
-                        }*/
-                        MusicChip c;
-                        c.setCenter(moment.m10/area, moment.m01/area);
-                        c.setDetection(true);
-                        mChipList.push_back(c);
-                        objectFound = true;
+                        }
 
                     } else objectFound = false; //musicChips[index].setDetection(false);
                 }//end for loop
             }
         }
-			
+
         if( /*musicChips[index].isDetected()*/ objectFound == true){
             //start music, apply filter
             //draw object location on screen
@@ -172,11 +173,14 @@ using namespace cv;
 
            //maskieren
            cvtColor(input, HSV, CV_BGR2HSV);
+           medianBlur(input,input,3);
            inRange(HSV, musicChips[i].getHSVmin(), musicChips[i].getHSVmax(), threshold);
 
            //filtern : opening und closing
            morphologyEx(threshold, threshold, MORPH_OPEN, element, Point(-1,-1), 2);
            morphologyEx(threshold, threshold, MORPH_CLOSE, element, Point(-1,-1), 2);
+
+
 
            //tracken
            trackMusicChip(i, musicChips[i], threshold, HSV, /*threshold*/input);
