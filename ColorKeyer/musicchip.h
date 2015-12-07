@@ -7,15 +7,37 @@
 using namespace cv;
 
 class MusicChip{
+
 public:
-    MusicChip(Scalar color, int contures, QString track);
+
+    MusicChip();
+    ~MusicChip(void);
+    MusicChip(int contures, QString track);
+
+    void setHSVmin(Scalar min);
+    void setHSVmax(Scalar max);
+    Scalar getHSVmin();
+    Scalar getHSVmax();
     void setCenter(int x, int y);
+    Point getCenter();
+    int getConture();
+    void setDetection(bool detec);
+    bool isDetected();
+    //Konstanten fuer moegliche Formen auf dem MusicChip
+    static const int TRIANGLE = 3;
+    static const int SQUARE = 4;
+    static const int HEXAGON = 6;
+    static const int CIRCLE = -1;
+
 private:
-    Scalar color;
+    Scalar min;
+    Scalar max;
     int contures;
+    bool detection;
     QString track;
     Point center;
 };
+
 
 #endif // MUSICCHIP
 
