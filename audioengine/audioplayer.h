@@ -12,7 +12,7 @@ class AudioPlayer: public QIODevice
 {
     Q_OBJECT
 public:
-    AudioPlayer(QObject* parent, int bufferSize = 999);
+    AudioPlayer(int bufferSize = 999);
     ~AudioPlayer();
     void start();
     void stop();

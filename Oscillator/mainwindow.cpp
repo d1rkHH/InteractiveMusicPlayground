@@ -9,7 +9,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , audioPlayer(this)
 
 {
     ui->setupUi(this);

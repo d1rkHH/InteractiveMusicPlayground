@@ -1,8 +1,7 @@
 #include "audioengine.h"
 
-AudioEngine::AudioEngine(QObject* parent, int bufferSize)
+AudioEngine::AudioEngine(int bufferSize)
     : bufferSize(bufferSize)
-    , audioPlayer(parent)
 {
     audioPlayer.setAudioSource(&audioFile);
 }

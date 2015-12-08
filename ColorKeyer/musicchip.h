@@ -4,6 +4,8 @@
 #include <opencv2/opencv.hpp>
 #include "audiofile.h"
 #include "colorrange.h"
+#include "audioplayer.h"
+#include "effectprocessor.h"
 
 using namespace cv;
 
@@ -15,13 +17,14 @@ public:
     ~MusicChip(void);
     MusicChip(int contures, QString track);
     MusicChip(int contures, ColorRange &range, QString track);
-
+    void playTrack();
     ColorRange getRange();
     void setCenter(int x, int y);
+    void setDetected(bool isDetected);
     Point getCenter();
+    void setEffectProcessor(EffectProcessor *processor);
+
     int getConture();
-    void setDetection(bool detec);
-    bool isDetected();
     //Konstanten fuer moegliche Formen auf dem MusicChip
     static const int TRIANGLE = 3;
     static const int PENTAGON = 5;
@@ -39,9 +42,11 @@ public:
 private:
     ColorRange *range;
     int contures;
-    bool detection;
-    QString track;
+    bool detected;
+    AudioFile file;
     Point center;
+    AudioPlayer *audioPlayer;
+    EffectProcessor *effectProcessor;
 };
 
 

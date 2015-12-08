@@ -9,12 +9,9 @@ void EffectProcessor::startProcessing(const QAudioFormat &format){
 }
 
 void EffectProcessor::process(float **input, float **output, int numFrames){
+    float effectStrength = calculateEffectStrength(cv::Point(0,0));
     for(int i = 0; i < numFrames; i++){
-        if(doLowPass){
-            output[0][i] = 0.5 * input[0][i] - 0.5 * x1;
-        } else {
-            output[0][i] = input[0][i];
-        }
+            output[0][i] = effectStrength * input[0][i] - effectStrength * x1;
             x1 = input[0][i];
     }
     // copy to other channels
@@ -29,6 +26,10 @@ void EffectProcessor::stopProcessing(){
 
 }
 
-void EffectProcessor::setDoLowPass(bool doLowPass){
-    this->doLowPass = doLowPass;
+void EffectProcessor::setChipCenter(cv::Point center){
+    this->chipCenter = center;
+}
+
+float EffectProcessor::calculateEffectStrength(cv::Point effect){
+    return 0.5;
 }

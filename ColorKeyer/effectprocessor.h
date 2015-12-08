@@ -3,6 +3,7 @@
 
 #include "audioprocessor.h"
 #include <QAudioFormat>
+#include <opencv2/opencv.hpp>
 
 class EffectProcessor: public AudioProcessor{
 public:
@@ -10,11 +11,12 @@ public:
     void startProcessing(const QAudioFormat &format);
     void process(float **input, float **output, int numFrames);
     void stopProcessing();
-    void setDoLowPass(bool doLowPass);
+    void setChipCenter(cv::Point center);
 private:
     int x1;
-    bool doLowPass;
     QAudioFormat format;
+    cv::Point chipCenter;
+    float calculateEffectStrength(cv::Point effect);
 };
 
 #endif // EFFECTPROCESSOR_H

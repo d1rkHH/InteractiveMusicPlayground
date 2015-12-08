@@ -5,8 +5,8 @@
 // see class Generator in
 // http://qt-project.org/doc/qt-4.8/multimedia-audiooutput-audiooutput-cpp.html
 
-AudioPlayer::AudioPlayer(QObject* parent, int bufferSize)
-    : QIODevice(parent)
+AudioPlayer::AudioPlayer(int bufferSize)
+    : QIODevice()
     , audioSource(0)
     , audioBufferPos(0)
     , audioOutput(0)

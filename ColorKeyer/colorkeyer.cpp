@@ -6,16 +6,24 @@ using namespace std;
 
     const int MIN_OBJECT_AREA = 10*10;
 
-    ColorKeyer::ColorKeyer():audioPlayer(0,999) {
-
+    ColorKeyer::ColorKeyer() {
+        QString fileString = "C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\demo.mp3";
         //musicchips hinzufuegen
         musicChips.reserve(6);
-        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::RED,0));
-        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::GREEN,0));
-        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::YELLOW,0));
-        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::BLUE,0));
-        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::PURPLE,0));
-        musicChips.push_back(MusicChip(MusicChip::HEXAGON,MusicChip::PURPLE,0));
+        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::RED,fileString));
+        /*musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::GREEN,fileString));
+        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::YELLOW,fileString));
+        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::BLUE,fileString));
+        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::PURPLE,fileString));
+        musicChips.push_back(MusicChip(MusicChip::HEXAGON,MusicChip::PURPLE,fileString));
+        */
+        EffectProcessor ep1;
+        musicChips[0].setEffectProcessor(&ep1);
+        /*musicChips[1].setEffectProcessor(&ep1);
+        musicChips[2].setEffectProcessor(&ep1);
+        musicChips[3].setEffectProcessor(&ep1);
+        musicChips[4].setEffectProcessor(&ep1);
+        musicChips[5].setEffectProcessor(&ep1);*/
 
         //Instanzvariablen setzen
         element = getStructuringElement(MORPH_CROSS,Size(8,8));
@@ -83,9 +91,8 @@ using namespace std;
            if(!(p.x == 0 && p.y == 0)){
                //Display center of musicchip with the color of the musicchip
                circle(result, p, 9, Scalar(0,0,0),-1,8,0);
-               //Get audiofile
-               //Calculate effects by x and y coordinates
-               //Play processed audiofile
+               musicChips[i].setCenter(p.x, p.y);
+               musicChips[i].playTrack();
            }          
         }
 
