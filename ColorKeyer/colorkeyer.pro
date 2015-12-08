@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         videoplayer.cpp \
     colorkeyer.cpp \
     musicchip.cpp \
-    colorrange.cpp
+    colorrange.cpp \
+    effectprocessor.cpp
 
 HEADERS  += videoplayer.h \
     colorkeyer.h \
     musicchip.h \
-    colorrange.h
+    colorrange.h \
+    effectprocessor.h
 
 FORMS    += videoplayer.ui
 

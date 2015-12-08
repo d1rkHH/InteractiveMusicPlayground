@@ -3,6 +3,7 @@
 #include "ui_videoplayer.h"
 #include "musicchip.h"
 #include "colorrange.h"
+#include "effectprocessor.h"
 
 VideoPlayer::VideoPlayer(QWidget *parent)
     : QMainWindow(parent)
@@ -148,4 +149,9 @@ void VideoPlayer::on_closingScrollbar_valueChanged(int value)
 {
     colorKeyer->setCloseValue(value);
     ui->closing->setText(QString::number(value));
+}
+
+void VideoPlayer::on_checkBox_stateChanged(int doLowPass)
+{
+    colorKeyer->effectProcessor.setDoLowPass(doLowPass);
 }

@@ -15,6 +15,7 @@ class VideoPlayer : public QMainWindow
 
 public:
     explicit VideoPlayer(QWidget *parent = 0);
+    ColorKeyer* colorKeyer;
     ~VideoPlayer();
 
 private slots:
@@ -40,10 +41,11 @@ private slots:
 
     void on_closingScrollbar_valueChanged(int value);
 
+    void on_checkBox_stateChanged(int arg1);
+
 private:
     Ui::VideoPlayer *ui;
     VideoEngine *videoThread;
-    ColorKeyer* colorKeyer;
     QString color;
     void setValueForColor(ColorRange::RangeIndex index, int value);
     void preLoadScrollBars(ColorRange range);

@@ -5,6 +5,8 @@
 #include "musicchip.h"
 #include "colorrange.h"
 #include "musicchip.h"
+#include "audioplayer.h"
+#include "effectprocessor.h"
 
 using namespace cv;
 
@@ -17,6 +19,7 @@ public:
     void setMedianBlurValue(int value);
     void setOpenValue(int value);
     void setCloseValue(int value);
+    EffectProcessor effectProcessor; //TODO: Auslagern
 
 private:
     //Liste von MusicChips, die pro Frame abgefragt werden
@@ -28,6 +31,7 @@ private:
     int medianBlurValue;
     int openValue;
     int closeValue;
+    AudioPlayer audioPlayer;
 };
 
 #endif // COLORKEYER_H

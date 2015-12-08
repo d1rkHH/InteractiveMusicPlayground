@@ -1,12 +1,12 @@
 #include "colorkeyer.h"
-#include <QDebug>;
+#include <QDebug>
 
 using namespace cv;
 using namespace std;
 
     const int MIN_OBJECT_AREA = 10*10;
 
-    ColorKeyer::ColorKeyer() {
+    ColorKeyer::ColorKeyer():audioPlayer(0,999) {
 
         //musicchips hinzufuegen
         musicChips.reserve(6);
