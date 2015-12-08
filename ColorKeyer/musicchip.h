@@ -43,7 +43,7 @@ private:
     ColorRange *range;
     int contures;
     bool detected;
-    AudioFile file;
+    AudioFile *file;
     Point center;
     AudioPlayer *audioPlayer;
     EffectProcessor *effectProcessor;

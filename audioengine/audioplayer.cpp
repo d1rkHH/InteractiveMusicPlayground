@@ -21,6 +21,7 @@ AudioPlayer::~AudioPlayer(){
     stop();
 }
 void AudioPlayer::setAudioSource(AudioSource* audioSource){
+
     this->audioSource = audioSource;
 }
 void AudioPlayer::setAudioProcessor(AudioProcessor*audioProcessor){
@@ -42,7 +43,7 @@ void AudioPlayer::stop(){
 }
 
 void AudioPlayer::start(){
-    qDebug() << "start";
+    qDebug() << "               start" ;
     close();
     if (audioSource != 0){
         audioSource->start();

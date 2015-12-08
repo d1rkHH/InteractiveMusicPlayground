@@ -1,4 +1,5 @@
 #include "musicchip.h"
+#include <QDebug>
 
 ColorRange MusicChip::YELLOW = ColorRange(Scalar(14,130,0), Scalar(32,255,255));
 ColorRange MusicChip::GREEN = ColorRange(Scalar(40,20,0), Scalar(75,255,255));
@@ -8,18 +9,22 @@ ColorRange MusicChip::PURPLE = ColorRange(Scalar(109,60,0), Scalar(130,255,255))
 
 
 MusicChip::MusicChip(int contures, QString track):detected(false){
-    this->contures = contures;
-    this->file = AudioFile(1024);
-    file.setFileName(track);
-    this->audioPlayer = new AudioPlayer(999);
+      //qDebug() << " " << track;
+    //this->contures = contures;
+    //this->file = new AudioFile(1024);
+    //file->setFileName(track);
+    //this->audioPlayer->setAudioSource(&file);
+    //this->audioPlayer = new AudioPlayer(999);
 }
 
 MusicChip::MusicChip(int contures, ColorRange &range, QString track):detected(false){
     this->contures = contures;
     this->range = &range;
-    this->file = AudioFile(1024);
-    file.setFileName(track);
+    this->file = new AudioFile(1024);
+    file->setFileName(track);
     this->audioPlayer = new AudioPlayer(999);
+    qDebug() << (file == 0);
+    this->audioPlayer->setAudioSource(file);
 }
 
 MusicChip::MusicChip():detected(false){

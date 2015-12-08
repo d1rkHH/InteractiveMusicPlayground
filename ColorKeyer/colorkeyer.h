@@ -22,10 +22,10 @@ public:
 
 private:
     //Liste von MusicChips, die pro Frame abgefragt werden
-    vector<MusicChip> musicChips;
-    Mat maskColor(const Mat &input, MusicChip musicChip);
+    vector<MusicChip*> musicChips;
+    Mat maskColor(const Mat &input, MusicChip *musicChip);
     Point ColorKeyer::centerOfMass(Mat image);
-    Mat ColorKeyer::maskShape(const Mat input, MusicChip &musicChip, double minSize);
+    Mat ColorKeyer::maskShape(const Mat input, MusicChip *musicChip, double minSize);
     Mat element;
     int medianBlurValue;
     int openValue;

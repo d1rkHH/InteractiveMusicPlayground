@@ -7,18 +7,17 @@ using namespace std;
     const int MIN_OBJECT_AREA = 10*10;
 
     ColorKeyer::ColorKeyer() {
-        QString fileString = "C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\demo.mp3";
-        //musicchips hinzufuegen
+        QString fileString = "C:\\Users\\dirk\\Desktop\\test.wav";
         musicChips.reserve(6);
-        musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::RED,fileString));
+        musicChips.push_back(new MusicChip(MusicChip::SQUARE,MusicChip::RED,fileString));
         /*musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::GREEN,fileString));
         musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::YELLOW,fileString));
         musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::BLUE,fileString));
         musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::PURPLE,fileString));
         musicChips.push_back(MusicChip(MusicChip::HEXAGON,MusicChip::PURPLE,fileString));
         */
-        EffectProcessor ep1;
-        musicChips[0].setEffectProcessor(&ep1);
+
+        musicChips[0]->setEffectProcessor(new EffectProcessor());
         /*musicChips[1].setEffectProcessor(&ep1);
         musicChips[2].setEffectProcessor(&ep1);
         musicChips[3].setEffectProcessor(&ep1);
@@ -30,7 +29,7 @@ using namespace std;
     }
 
 
-    Mat ColorKeyer::maskColor(const Mat &input, MusicChip musicChip){
+    Mat ColorKeyer::maskColor(const Mat &input, MusicChip *musicChip){
 
         cvtColor(input, input, CV_BGR2HSV);
 
@@ -39,12 +38,12 @@ using namespace std;
         }
 
         Mat output(input.rows, input.cols, CV_8UC1);
-        inRange(input, musicChip.getRange().min, musicChip.getRange().max, output);
+        inRange(input, musicChip->getRange().min, musicChip->getRange().max, output);
 
         return output;
     }
 
-    Mat ColorKeyer::maskShape(const Mat input, MusicChip &musicChip, double minSize){
+    Mat ColorKeyer::maskShape(const Mat input, MusicChip *musicChip, double minSize){
 
         Mat output = Mat::zeros(input.size(), CV_8UC1);
         vector<Vec4i> hierachy;
@@ -66,10 +65,10 @@ using namespace std;
             approxPolyDP(contures[i], approx, 0.01*arcLength(contures[i], true), true);
 
             if(contourArea(contures[i]) >= minSize){
-                if(musicChip.getConture() < 12 && approx.size() == musicChip.getConture()){
+                if(musicChip->getConture() < 12 && approx.size() == musicChip->getConture()){
                     drawContours(output,contures,i,Scalar(255,255,255),CV_FILLED,8,noArray());
                     break;
-                } else if (musicChip.getConture() >= 12 && approx.size() > musicChip.getConture()){
+                } else if (musicChip->getConture() >= 12 && approx.size() > musicChip->getConture()){
                     drawContours(output,contures,i,Scalar(255,255,255),CV_FILLED,8,noArray());
                     break;
                 }
@@ -89,10 +88,11 @@ using namespace std;
            Point p = centerOfMass(m);
 
            if(!(p.x == 0 && p.y == 0)){
+                qDebug() << musicChips[i]->getConture();
                //Display center of musicchip with the color of the musicchip
                circle(result, p, 9, Scalar(0,0,0),-1,8,0);
-               musicChips[i].setCenter(p.x, p.y);
-               musicChips[i].playTrack();
+               musicChips[i]->setCenter(p.x, p.y);
+               musicChips[i]->playTrack();
            }          
         }
 
