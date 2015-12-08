@@ -13,12 +13,14 @@ AudioFile::AudioFile(int bufferSize)
     , bufferSize(bufferSize)
     , available(0)
 {
+    qDebug() << __FUNCTION__;
 }
 AudioFile::~AudioFile(){
-    qDebug() << "~AudioFile";
+    qDebug() << __FUNCTION__;
     stop();
 }
 void AudioFile::stop(){
+    qDebug() << __FUNCTION__;
     delete audioDecoder;
     audioDecoder = 0;
     audioFormat.setSampleType(QAudioFormat::Unknown);
@@ -27,13 +29,16 @@ void AudioFile::stop(){
     audioFormat.setSampleSize(0);
 }
 void AudioFile::setFileName(const QString &sourceFileName){
+    qDebug() << __FUNCTION__;
     this->sourceFileName = sourceFileName;
 }
 
 void AudioFile::start(){
+    qDebug() << __FUNCTION__;
     stop();
     audioDecoder = new AudioDecoder(sourceFileName.toStdString());
     int error = audioDecoder->open();
+    qDebug() << "AudioDecoder Error: " << error;
     if (error == 0){
        audioFormat.setCodec("audio/pcm");
        audioFormat.setByteOrder(QAudioFormat::LittleEndian);
@@ -48,12 +53,14 @@ void AudioFile::start(){
 }
 
 void AudioFile::setSamplePosition(int samplePosition){
+    qDebug() << __FUNCTION__;
     if (audioDecoder){
         audioDecoder->seek(samplePosition);
     }
 }
 
 int AudioFile::samplePosition() const{
+    qDebug() << __FUNCTION__;
     if (audioDecoder){
         return audioDecoder->positionInSamples();
     }
@@ -62,12 +69,14 @@ int AudioFile::samplePosition() const{
     }
 }
 const QAudioFormat& AudioFile::format()const{
+    qDebug() << __FUNCTION__;
     return audioFormat;
 }
 
 
 qint64 AudioFile::read(float**buffer, qint64 framesWanted)
 {
+    qDebug() << __FUNCTION__;
     qint64 framesCopied = 0;
     while (framesWanted - framesCopied > 0) {
         if (available - audioBufferPos == 0){

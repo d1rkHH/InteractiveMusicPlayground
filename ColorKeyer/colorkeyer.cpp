@@ -7,7 +7,8 @@ using namespace std;
     const int MIN_OBJECT_AREA = 10*10;
 
     ColorKeyer::ColorKeyer() {
-        QString fileString = "C:\\Users\\dirk\\Desktop\\test.wav";
+        qDebug() << __FUNCTION__;
+        QString fileString = "C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\demo.mp3";
         musicChips.reserve(6);
         musicChips.push_back(new MusicChip(MusicChip::SQUARE,MusicChip::RED,fileString));
         /*musicChips.push_back(MusicChip(MusicChip::SQUARE,MusicChip::GREEN,fileString));
@@ -30,7 +31,7 @@ using namespace std;
 
 
     Mat ColorKeyer::maskColor(const Mat &input, MusicChip *musicChip){
-
+        qDebug() << __FUNCTION__;
         cvtColor(input, input, CV_BGR2HSV);
 
         if(medianBlurValue > 0){
@@ -44,10 +45,11 @@ using namespace std;
     }
 
     Mat ColorKeyer::maskShape(const Mat input, MusicChip *musicChip, double minSize){
-
+        qDebug() << __FUNCTION__;
         Mat output = Mat::zeros(input.size(), CV_8UC1);
         vector<Vec4i> hierachy;
         vector<vector<Point>> contures;
+        int contours = musicChip->getConture();
 
         if(openValue > 0){
              morphologyEx(input, input, MORPH_OPEN, element, Point(-1,-1), openValue);
@@ -65,10 +67,10 @@ using namespace std;
             approxPolyDP(contures[i], approx, 0.01*arcLength(contures[i], true), true);
 
             if(contourArea(contures[i]) >= minSize){
-                if(musicChip->getConture() < 12 && approx.size() == musicChip->getConture()){
+                if(contours < 12 && approx.size() == contours){
                     drawContours(output,contures,i,Scalar(255,255,255),CV_FILLED,8,noArray());
                     break;
-                } else if (musicChip->getConture() >= 12 && approx.size() > musicChip->getConture()){
+                } else if (contours >= 12 && approx.size() > contours){
                     drawContours(output,contures,i,Scalar(255,255,255),CV_FILLED,8,noArray());
                     break;
                 }
@@ -88,7 +90,6 @@ using namespace std;
            Point p = centerOfMass(m);
 
            if(!(p.x == 0 && p.y == 0)){
-                qDebug() << musicChips[i]->getConture();
                //Display center of musicchip with the color of the musicchip
                circle(result, p, 9, Scalar(0,0,0),-1,8,0);
                musicChips[i]->setCenter(p.x, p.y);
@@ -101,6 +102,7 @@ using namespace std;
 
     //berechne den Mittelpunkt
     Point ColorKeyer::centerOfMass(Mat image){
+        qDebug() << __FUNCTION__;
         int sumx = 0;
         int sumy = 0;
         int count = 0;
@@ -122,6 +124,7 @@ using namespace std;
     }
 
     void ColorKeyer::startProcessing(const VideoFormat& format){
+        qDebug() << __FUNCTION__;
         // Höhe: format.frameHeight()
         // Breite: format.frameWidth()
         // Framerate: format.framesPerSecond()
@@ -129,14 +132,17 @@ using namespace std;
     }
 
     void ColorKeyer::setMedianBlurValue(int value){
+        qDebug() << __FUNCTION__;
         this->medianBlurValue = value;
     }
 
     void ColorKeyer::setOpenValue(int value){
+        qDebug() << __FUNCTION__;
         this->openValue = value;
     }
 
     void ColorKeyer::setCloseValue(int value){
+        qDebug() << __FUNCTION__;
         this->closeValue = value;
     }
 

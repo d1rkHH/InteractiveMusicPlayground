@@ -4,6 +4,9 @@
 #include "musicchip.h"
 #include "colorrange.h"
 #include "effectprocessor.h"
+#include "audioplayer.h"
+#include "audiofile.h"
+#include "audioprocessor.h"
 
 VideoPlayer::VideoPlayer(QWidget *parent)
     : QMainWindow(parent)
@@ -11,20 +14,20 @@ VideoPlayer::VideoPlayer(QWidget *parent)
     , videoThread(new VideoEngine)
     , colorKeyer(new ColorKeyer())
 {
+    qDebug() << __FUNCTION__;
     ui->setupUi(this);
     videoThread->setProcessor(colorKeyer);
     connect(videoThread, SIGNAL(sendInputImage(const QImage&)), ui->inputFrame, SLOT(setImage(const QImage&)));
     connect(videoThread, SIGNAL(sendProcessedImage(const QImage&)), ui->processedFrame , SLOT(setImage(const QImage&)));
-
 }
 
 VideoPlayer::~VideoPlayer()
 {
+    qDebug() << __FUNCTION__;
     delete videoThread;
     delete colorKeyer;
     delete ui;
 }
-
 
 void VideoPlayer::on_playButton_clicked()
 {

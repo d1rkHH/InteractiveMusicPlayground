@@ -1,16 +1,18 @@
 #include "channelbuffer.h"
-
+#include <QDebug>
 ChannelBuffer::ChannelBuffer()
     : channelBuffer(0)
     , numChannels(0)
     , bufferSize(0)
 {
-
+    qDebug() << __FUNCTION__;
 }
 ChannelBuffer::~ChannelBuffer(){
+    qDebug() << __FUNCTION__;
     destroy();
 }
 void ChannelBuffer::resize(int numChannels, int bufferSize){
+    qDebug() << __FUNCTION__;
     destroy();
     this->numChannels = numChannels;
     this->bufferSize = bufferSize;
@@ -21,6 +23,7 @@ void ChannelBuffer::resize(int numChannels, int bufferSize){
     clear();
 }
 void ChannelBuffer::destroy(){
+    qDebug() << __FUNCTION__;
     for (int c = 0; c < numChannels; c++){
         delete[] channelBuffer[c];
     }
@@ -31,6 +34,7 @@ void ChannelBuffer::destroy(){
 }
 
 void ChannelBuffer::clear(){
+    qDebug() << __FUNCTION__;
     for(int c = 0; c < numChannels; c++){
         for(int i = 0; i < bufferSize; i++){
             channelBuffer[c][i] = 0;

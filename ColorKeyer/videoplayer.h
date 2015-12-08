@@ -17,6 +17,7 @@ public:
     explicit VideoPlayer(QWidget *parent = 0);
     ColorKeyer* colorKeyer;
     ~VideoPlayer();
+    void playAudio();
 
 private slots:
     void on_playButton_clicked();

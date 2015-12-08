@@ -15,7 +15,6 @@ public:
 
     MusicChip();
     ~MusicChip(void);
-    MusicChip(int contures, QString track);
     MusicChip(int contures, ColorRange &range, QString track);
     void playTrack();
     ColorRange getRange();

@@ -15,21 +15,23 @@ AudioPlayer::AudioPlayer(int bufferSize)
     , available(0)
     , audioProcessor(0)
 {
+    qDebug() << __FUNCTION__;
 }
 AudioPlayer::~AudioPlayer(){
-    qDebug() << "~AudioPlayer";
+    qDebug() << __FUNCTION__;
     stop();
 }
 void AudioPlayer::setAudioSource(AudioSource* audioSource){
-
+    qDebug() << __FUNCTION__;
     this->audioSource = audioSource;
 }
 void AudioPlayer::setAudioProcessor(AudioProcessor*audioProcessor){
+    qDebug() << __FUNCTION__;
     this->audioProcessor = audioProcessor;
 }
 
 void AudioPlayer::stop(){
-    qDebug() << "stop";
+    qDebug() << __FUNCTION__;
     close();
     if (audioSource){
         audioSource->stop();
@@ -43,7 +45,7 @@ void AudioPlayer::stop(){
 }
 
 void AudioPlayer::start(){
-    qDebug() << "               start" ;
+    qDebug() << __FUNCTION__;
     close();
     if (audioSource != 0){
         audioSource->start();
@@ -60,7 +62,7 @@ void AudioPlayer::start(){
        if (audioProcessor != 0){
            audioProcessor->startProcessing(audioFormat);
        }
-       QIODevice::open(QIODevice::ReadOnly);
+       qDebug() << "Open Successfull? "<< QIODevice::open(QIODevice::ReadOnly);
        audioOutput = new QAudioOutput(audioFormat, this->parent());
        audioOutput->start(this);
    }
@@ -68,6 +70,7 @@ void AudioPlayer::start(){
 
 
 const QAudioFormat& AudioPlayer::format()const{
+    qDebug() << __FUNCTION__;
     return audioFormat;
 }
 
@@ -75,6 +78,7 @@ const QAudioFormat& AudioPlayer::format()const{
 
 qint64 AudioPlayer::readData(char *data, qint64 bytesWanted)
 {
+    qDebug() << __FUNCTION__;
     if (audioSource == 0){
         return 0;
     }
@@ -104,6 +108,7 @@ qint64 AudioPlayer::readData(char *data, qint64 bytesWanted)
 
 qint64 AudioPlayer::writeData(const char *data, qint64 len)
 {
+    qDebug() << __FUNCTION__;
     Q_UNUSED(data);
     Q_UNUSED(len);
 
@@ -111,5 +116,6 @@ qint64 AudioPlayer::writeData(const char *data, qint64 len)
 }
 
 qint64 AudioPlayer::bytesAvailable()const{
+    qDebug() << __FUNCTION__;
     return audioFormat.bytesForFrames(available - audioBufferPos);
 }
