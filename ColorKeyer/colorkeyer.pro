@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         videoplayer.cpp \
     colorkeyer.cpp \
-    musicchip.cpp
+    musicchip.cpp \
+    colorrange.cpp
 
 HEADERS  += videoplayer.h \
     colorkeyer.h \
-    musicchip.h
+    musicchip.h \
+    colorrange.h
 
 FORMS    += videoplayer.ui
 

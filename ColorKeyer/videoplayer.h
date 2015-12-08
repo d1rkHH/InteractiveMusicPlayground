@@ -19,14 +19,29 @@ public:
 
 private slots:
     void on_playButton_clicked();
-
     void on_openVideoFileButton_clicked();
+    void on_colorComboBox_currentIndexChanged(const QString &color);
 
+    void on_minHueScrollbar_valueChanged(int value);
+
+    void on_minSatScrollbar_valueChanged(int value);
+
+    void on_minValScrollbar_valueChanged(int value);
+
+    void on_maxHueScrollbar_valueChanged(int value);
+
+    void on_maxSatScrollbar_valueChanged(int value);
+
+    void on_maxValScrollbar_valueChanged(int value);
 
 private:
     Ui::VideoPlayer *ui;
     VideoEngine *videoThread;
     ColorKeyer* colorKeyer;
+    QString color;
+    void setValueForColor(ColorRange::RangeIndex index, int value);
+    void preLoadScrollBars(ColorRange range);
+
 };
 
 #endif // VIDEOPLAYER_H

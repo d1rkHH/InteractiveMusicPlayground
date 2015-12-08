@@ -3,6 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 #include "audiofile.h"
+#include "colorrange.h"
 
 using namespace cv;
 
@@ -13,11 +14,9 @@ public:
     MusicChip();
     ~MusicChip(void);
     MusicChip(int contures, QString track);
+    MusicChip(int contures, ColorRange &range, QString track);
 
-    void setHSVmin(Scalar min);
-    void setHSVmax(Scalar max);
-    Scalar getHSVmin();
-    Scalar getHSVmax();
+    ColorRange getRange();
     void setCenter(int x, int y);
     Point getCenter();
     int getConture();
@@ -28,11 +27,17 @@ public:
     static const int PENTAGON = 5;
     static const int SQUARE = 4;
     static const int HEXAGON = 6;
-    static const int CIRCLE = -1;
+    static const int CIRCLE = 12;
+
+    static ColorRange YELLOW;
+    static ColorRange GREEN;
+    static ColorRange RED;
+    static ColorRange BLUE;
+    static ColorRange PURPLE;
+
 
 private:
-    Scalar min;
-    Scalar max;
+    ColorRange *range;
     int contures;
     bool detection;
     QString track;
