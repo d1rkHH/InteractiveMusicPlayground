@@ -14,24 +14,20 @@ public:
     ColorKeyer();
     void startProcessing(const VideoFormat& format);
     cv::Mat process(const cv::Mat&source);
-    void trackMusicChip(int currentChip, MusicChip chip, Mat threshold, Mat HSV, Mat input);
-    void drawMusicChip(vector<MusicChip> chips,Mat &frame, Mat &temp, vector< vector<Point> > contours, vector<Vec4i> hierarchy);
-    int RED = 5;
-    int YELLOW = 21;
-    int GREEN = 70;
-    int BLUE = 100;
-    int PURPLE = 135;
-
-
+    void setMedianBlurValue(int value);
+    void setOpenValue(int value);
+    void setCloseValue(int value);
 
 private:
     //Liste von MusicChips, die pro Frame abgefragt werden
     vector<MusicChip> musicChips;
-    vector<Mat> outputs;
     Mat maskColor(const Mat &input, MusicChip musicChip);
     Point ColorKeyer::centerOfMass(Mat image);
     Mat ColorKeyer::maskShape(const Mat input, MusicChip &musicChip, double minSize);
-    void ColorKeyer::setupGUI();
+    Mat element;
+    int medianBlurValue;
+    int openValue;
+    int closeValue;
 };
 
 #endif // COLORKEYER_H

@@ -120,3 +120,32 @@ void VideoPlayer::on_maxValScrollbar_valueChanged(int value)
     setValueForColor(ColorRange::MAX_VAL, value);
     ui->maxval->setText(QString::number(value));
 }
+
+void VideoPlayer::on_medianBlurScrollbar_valueChanged(int value)
+{
+    int newvalue = 0;
+    if(value < 2){
+        colorKeyer->setMedianBlurValue(0);
+    } else if(value % 2 == 0){
+        newvalue = value + 1;
+        colorKeyer->setMedianBlurValue(value + 1);
+        ui->medianBlurScrollbar->setValue(value+1);
+    } else {
+        newvalue = value;
+        colorKeyer->setMedianBlurValue(value);
+        ui->medianBlurScrollbar->setValue(value);
+    }
+    ui->medianblur->setText(QString::number(newvalue));
+}
+
+void VideoPlayer::on_openingScrollbar_valueChanged(int value)
+{
+    colorKeyer->setOpenValue(value);
+    ui->opening->setText(QString::number(value));
+}
+
+void VideoPlayer::on_closingScrollbar_valueChanged(int value)
+{
+    colorKeyer->setCloseValue(value);
+    ui->closing->setText(QString::number(value));
+}

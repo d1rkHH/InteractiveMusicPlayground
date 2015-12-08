@@ -34,6 +34,12 @@ private slots:
 
     void on_maxValScrollbar_valueChanged(int value);
 
+    void on_medianBlurScrollbar_valueChanged(int value);
+
+    void on_openingScrollbar_valueChanged(int value);
+
+    void on_closingScrollbar_valueChanged(int value);
+
 private:
     Ui::VideoPlayer *ui;
     VideoEngine *videoThread;
