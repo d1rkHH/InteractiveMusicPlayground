@@ -8,13 +8,13 @@
 #include "audiofile.h"
 #include "audioprocessor.h"
 
-VideoPlayer::VideoPlayer(QWidget *parent)
+VideoPlayer::VideoPlayer(SoundControl *soundControl, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::VideoPlayer)
     , videoThread(new VideoEngine)
-    , colorKeyer(new ColorKeyer())
+    , colorKeyer(new ColorKeyer(soundControl))
 {
-    qDebug() << __FUNCTION__;
+    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     ui->setupUi(this);
     videoThread->setProcessor(colorKeyer);
     connect(videoThread, SIGNAL(sendInputImage(const QImage&)), ui->inputFrame, SLOT(setImage(const QImage&)));
@@ -23,7 +23,7 @@ VideoPlayer::VideoPlayer(QWidget *parent)
 
 VideoPlayer::~VideoPlayer()
 {
-    qDebug() << __FUNCTION__;
+    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     delete videoThread;
     delete colorKeyer;
     delete ui;
@@ -31,12 +31,14 @@ VideoPlayer::~VideoPlayer()
 
 void VideoPlayer::on_playButton_clicked()
 {
+    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     videoThread->start();
 }
 
 
 void VideoPlayer::on_openVideoFileButton_clicked()
 {
+    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     // Kamera
     videoThread->openCamera();
     videoThread->start();
@@ -54,15 +56,15 @@ void VideoPlayer::on_colorComboBox_currentIndexChanged(const QString &color)
 {
     this->color = color;
     if(this->color == "RED"){
-        preLoadScrollBars(MusicChip::RED);
+        preLoadScrollBars(ColorRange::RED);
     } else if(this->color == "YELLOW"){
-        preLoadScrollBars(MusicChip::YELLOW);
+        preLoadScrollBars(ColorRange::YELLOW);
     } else if(this->color == "GREEN"){
-        preLoadScrollBars(MusicChip::GREEN);
+        preLoadScrollBars(ColorRange::GREEN);
     } else if(this->color == "BLUE"){
-        preLoadScrollBars(MusicChip::BLUE);
+        preLoadScrollBars(ColorRange::BLUE);
     } else if(this->color == "PURPLE"){
-        preLoadScrollBars(MusicChip::PURPLE);
+        preLoadScrollBars(ColorRange::PURPLE);
     }
 }
 
@@ -77,15 +79,15 @@ void VideoPlayer::preLoadScrollBars(ColorRange range){
 
 void VideoPlayer::setValueForColor(ColorRange::RangeIndex index, int value){
     if(this->color == "RED"){
-        MusicChip::RED.setValue(index,value);
+       ColorRange::RED.setValue(index,value);
     } else if(this->color == "YELLOW"){
-        MusicChip::YELLOW.setValue(index,value);
+        ColorRange::YELLOW.setValue(index,value);
     } else if(this->color == "GREEN"){
-        MusicChip::GREEN.setValue(index,value);
+        ColorRange::GREEN.setValue(index,value);
     } else if(this->color == "BLUE"){
-        MusicChip::BLUE.setValue(index,value);
+        ColorRange::BLUE.setValue(index,value);
     } else if(this->color == "PURPLE"){
-        MusicChip::PURPLE.setValue(index,value);
+        ColorRange::PURPLE.setValue(index,value);
     }
 }
 
@@ -152,4 +154,10 @@ void VideoPlayer::on_closingScrollbar_valueChanged(int value)
 {
     colorKeyer->setCloseValue(value);
     ui->closing->setText(QString::number(value));
+}
+
+void VideoPlayer::on_minChipSizeScrollbar_valueChanged(int value)
+{
+    colorKeyer->setMinChipSize(value);
+    ui->minchipsize->setText(QString::number(value));
 }

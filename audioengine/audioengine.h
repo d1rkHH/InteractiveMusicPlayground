@@ -8,7 +8,7 @@
 class AudioEngine
 {
 public:
-    AudioEngine(int bufferSize = 1024);
+    AudioEngine(QObject* parent, int bufferSize = 1024);
     void open(const QString& sourceFileName);
     void start();
     void stop();

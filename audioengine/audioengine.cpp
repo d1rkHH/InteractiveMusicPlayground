@@ -1,7 +1,7 @@
 #include "audioengine.h"
 #include <QDebug>
-AudioEngine::AudioEngine(int bufferSize)
-    : bufferSize(bufferSize)
+AudioEngine::AudioEngine(QObject * parent, int bufferSize)
+    : bufferSize(bufferSize), audioPlayer(parent)
 {
     qDebug() << __FUNCTION__;
     audioPlayer.setAudioSource(&audioFile);

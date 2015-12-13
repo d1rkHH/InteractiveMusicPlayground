@@ -2,52 +2,43 @@
 #define MUSICCHIP
 
 #include <opencv2/opencv.hpp>
-#include "audiofile.h"
 #include "colorrange.h"
-#include "audioplayer.h"
-#include "effectprocessor.h"
+#include <QObject>
+#include "shapes.h"
 
 using namespace cv;
 
-class MusicChip{
+class MusicChip : public QObject{
+
+    Q_OBJECT
 
 public:
-
-    MusicChip();
+    MusicChip(int contour, ColorRange &range, QString fileName, QObject* parent = 0);
     ~MusicChip(void);
-    MusicChip(int contures, ColorRange &range, QString track);
-    void playTrack();
+    void handleAudio(bool detected, Point position = Point(0,0), int positionTolerance = 5);
+    void sendTrack(){emit passTrack(fileName);}
+    //Getter and Setter
     ColorRange getRange();
-    void setCenter(int x, int y);
-    void setDetected(bool isDetected);
+    int getContour();
+    QString getFileName();
     Point getCenter();
-    void setEffectProcessor(EffectProcessor *processor);
+    void setCenter(int x, int y);
+    void setCenter(Point center);
 
-    int getConture();
-    //Konstanten fuer moegliche Formen auf dem MusicChip
-    static const int TRIANGLE = 3;
-    static const int PENTAGON = 5;
-    static const int SQUARE = 4;
-    static const int HEXAGON = 6;
-    static const int CIRCLE = 12;
-
-    static ColorRange YELLOW;
-    static ColorRange GREEN;
-    static ColorRange RED;
-    static ColorRange BLUE;
-    static ColorRange PURPLE;
-
+signals:
+    void on(Point position);
+    void off();
+    void positionChanged(Point position);
+    void passTrack(QString track);
 
 private:
     ColorRange *range;
-    int contures;
-    bool detected;
-    AudioFile *file;
+    int contour;
+    QString fileName;
+    bool playing;
     Point center;
-    AudioPlayer *audioPlayer;
-    EffectProcessor *effectProcessor;
+    bool hasPositionChanged(int tolerance, Point position);
 };
-
 
 #endif // MUSICCHIP
 

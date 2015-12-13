@@ -14,7 +14,7 @@ class VideoPlayer : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit VideoPlayer(QWidget *parent = 0);
+    explicit VideoPlayer(SoundControl* soundControl,QWidget *parent = 0);
     ColorKeyer* colorKeyer;
     ~VideoPlayer();
     void playAudio();
@@ -41,6 +41,8 @@ private slots:
     void on_openingScrollbar_valueChanged(int value);
 
     void on_closingScrollbar_valueChanged(int value);
+
+    void on_minChipSizeScrollbar_valueChanged(int value);
 
 private:
     Ui::VideoPlayer *ui;

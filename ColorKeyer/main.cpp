@@ -1,23 +1,21 @@
 #include "videoplayer.h"
+#include "soundcontrol.h"
 #include "audioplayer.h"
 #include "effectprocessor.h"
 #include <QApplication>
+#include <QThread>
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+using namespace std;
 
 int main(int argc, char *argv[])
 {
-    qDebug() << __FUNCTION__;
     QApplication a(argc, argv);
-    VideoPlayer w;
+    qRegisterMetaType<Point>("Point");
+    SoundControl* soundControl = new SoundControl();
+    VideoPlayer w(soundControl);
     w.show();
-
-    /*
-    AudioPlayer audioPlayer(999);
-    AudioFile file(1024);
-    file.setFileName("C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\demo.mp3");
-    audioPlayer.setAudioSource(&file);
-    //audioPlayer.setAudioProcessor(new EffectProcessor());
-    audioPlayer.start();
-    */
 
     return a.exec();
 }
