@@ -3,6 +3,7 @@
 #include "videoformat.h"
 #include "musicchip.h"
 #include <QDebug>
+#include <QDir>
 
 using namespace cv;
 using namespace std;
@@ -10,13 +11,13 @@ using namespace std;
 ColorKeyer::ColorKeyer(SoundControl *soundControl, QObject *parent) : QObject(parent),minChipSize(100),element(getStructuringElement(MORPH_CROSS,Size(5,5))) {
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     //Create the musicChips
-    MusicChip* redSquare = new MusicChip(Shapes::SQUARE,ColorRange::RED,"C:\\Users\\Besitzer\\Music\\Linkin Park\\You did it to yourself\\03. In My Remains.mp3");
-    MusicChip* blueSquare = new MusicChip(Shapes::SQUARE,ColorRange::BLUE,"C:\\Users\\Besitzer\\Music\\BoogieWoogieBed.wav");
+    MusicChip* redSquare = new MusicChip(Shapes::SQUARE,ColorRange::RED,QDir::currentPath()+"/XOXO.mp3");
+    //MusicChip* blueSquare = new MusicChip(Shapes::SQUARE,ColorRange::BLUE,QDir::currentPath()+"/Alaska.mp3");
 
     //Put them into a vector
-    musicChips.reserve(2);
+    musicChips.reserve(1);
     musicChips.push_back(redSquare);
-    musicChips.push_back(blueSquare);
+    //musicChips.push_back(blueSquare);
 
     //Connect the SIGNALS and SLOTS
     //ColorKeyer

@@ -62,7 +62,7 @@ void AudioPlayer::start(){
        if (audioProcessor != 0){
            audioProcessor->startProcessing(audioFormat);
        }
-       qDebug() << "Open Successfull? "<< QIODevice::open(QIODevice::ReadOnly);
+       QIODevice::open(QIODevice::ReadOnly);
        audioOutput = new QAudioOutput(audioFormat, this->parent());
        audioOutput->start(this);
    }

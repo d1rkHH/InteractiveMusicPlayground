@@ -7,6 +7,9 @@
 QT       += core gui widgets multimedia
 
 
+DEFINES += QT_NO_DEBUG_OUTPUT
+
+
 
 TARGET = ColorKeyer
 TEMPLATE = app
@@ -18,7 +21,8 @@ SOURCES += main.cpp\
     musicchip.cpp \
     colorrange.cpp \
     effectprocessor.cpp \
-    soundcontrol.cpp
+    soundcontrol.cpp \
+    musicchipplayer.cpp
 
 HEADERS  += videoplayer.h \
     colorkeyer.h \
@@ -26,7 +30,8 @@ HEADERS  += videoplayer.h \
     colorrange.h \
     effectprocessor.h \
     soundcontrol.h \
-    shapes.h
+    shapes.h \
+    musicchipplayer.h
 
 FORMS    += videoplayer.ui
 

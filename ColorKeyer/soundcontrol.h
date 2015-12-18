@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QAudioOutput>
 #include <opencv2/opencv.hpp>
+#include "musicchipplayer.h"
 
 using namespace cv;
 
@@ -27,19 +28,12 @@ public slots:
     void setEffects(Point e1, Point e2, Point e3, Point e4);
 
 private:
-    AudioFile* redTrack;
-    AudioFile* yellowTrack;
-    AudioFile* greenTrack;
-    AudioFile* blueTrack;
-    AudioFile* purpleTrack;
-    AudioPlayer* redPlayer;
-    AudioPlayer* yellowPlayer;
-    AudioPlayer* greenPlayer;
-    AudioPlayer* bluePlayer;
-    AudioPlayer* purplePlayer;
-    EffectProcessor* processor;
-    AudioPlayer* getPlayer(QString playerName);
-    AudioFile* getTrack(QString playerName);
+    MusicChipPlayer* redPlayer;
+    MusicChipPlayer* bluePlayer;
+    MusicChipPlayer* greenPlayer;
+    MusicChipPlayer* yellowPlayer;
+    MusicChipPlayer* purplePlayer;
+    MusicChipPlayer* getPlayer(QString playerName);
 };
 
 #endif // SOUNDCONTROL_H

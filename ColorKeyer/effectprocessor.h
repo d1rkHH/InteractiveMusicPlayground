@@ -12,7 +12,11 @@ public:
     void process(float **input, float **output, int numFrames);
     void stopProcessing();
     void setChipCenter(cv::Point center);
+    void setVolume(float volume);
 private:
+    float volume;
+    float gainChange;
+    float gain;
     int x1;
     QAudioFormat format;
     cv::Point chipCenter;
