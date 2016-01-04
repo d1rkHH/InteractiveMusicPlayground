@@ -76,7 +76,6 @@ const QAudioFormat& AudioFile::format()const{
 
 qint64 AudioFile::read(float**buffer, qint64 framesWanted)
 {
-    qDebug() << __FUNCTION__;
     qint64 framesCopied = 0;
     while (framesWanted - framesCopied > 0) {
         if (available - audioBufferPos == 0){
@@ -95,9 +94,8 @@ qint64 AudioFile::read(float**buffer, qint64 framesWanted)
         }
 
         framesCopied += chunk;
-        audioBufferPos += chunk ;
+        audioBufferPos += chunk;
     }
     return framesCopied;
-
 }
 

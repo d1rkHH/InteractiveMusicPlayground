@@ -14,6 +14,7 @@ AudioPlayer::AudioPlayer(QObject* parent, int bufferSize)
     , bufferSize(bufferSize)
     , available(0)
     , audioProcessor(0)
+    , endOfFile(false)
 {
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
 }
@@ -36,6 +37,7 @@ void AudioPlayer::stop(){
     if (audioSource){
         audioSource->stop();
     }
+    audioOutput->stop();
     delete audioOutput;
     audioOutput = 0;
     audioFormat.setSampleType(QAudioFormat::Unknown);
@@ -76,12 +78,11 @@ const QAudioFormat& AudioPlayer::format()const{
 
 
 
-qint64 AudioPlayer::readData(char *data, qint64 bytesWanted)
-{
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
+qint64 AudioPlayer::readData(char *data, qint64 bytesWanted) {
     if (audioSource == 0){
         return 0;
     }
+
     qint64 framesWanted = audioFormat.framesForBytes(bytesWanted);
     qint64 total = 0;
     while (framesWanted - total > 0) {
