@@ -26,10 +26,11 @@ public slots:
     void play(Point position);
     void stop();
     void applyEffects(Point position);
-    void setTrack(QString track);
+    void setTrack();
     void setEffects(Point e1, Point e2, Point e3, Point e4);
 
 private:
+    vector<MusicChipPlayer*> musicChipPlayers;
     MusicChipPlayer* redPlayer;
     MusicChipPlayer* bluePlayer;
     MusicChipPlayer* greenPlayer;

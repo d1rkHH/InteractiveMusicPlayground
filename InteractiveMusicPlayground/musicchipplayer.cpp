@@ -5,7 +5,7 @@ MusicChipPlayer::MusicChipPlayer(QString objectName, QObject *parent) : QObject(
     this->setObjectName(objectName);
     this->player = new AudioPlayer(this);
     this->file = new AudioFile();
-    this->processor = new EffectProcessor();
+    this->processor = new EffectProcessor(44100);
     this->player->setAudioSource(file);
     this->player->setAudioProcessor(processor);
 }

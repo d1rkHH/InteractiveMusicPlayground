@@ -31,7 +31,7 @@ signals:
     void on(Point position);
     void off();
     void positionChanged(Point position);
-    void passTrack(QString track);
+    void passTrack();
 
 private:
     //The ColorRange for this MusicChip

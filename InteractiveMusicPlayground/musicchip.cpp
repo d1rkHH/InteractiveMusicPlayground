@@ -7,6 +7,8 @@ MusicChip::MusicChip(int contour, ColorRange &range, QString fileName,QObject* p
     , contour(contour)
     , range(&range)
     , fileName(fileName){
+    //Set the Object name of this musicChip to the color plus the contour number
+    this->setObjectName(this->range->getName() + contour);
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
 }
 
@@ -44,7 +46,7 @@ void MusicChip::handleAudio(bool detected, Point position, int positionTolerance
 
 //Wrapper-Method to emit passTrack from outside of MusicChip
 void MusicChip::sendTrack(){
-    emit passTrack(fileName);
+    emit passTrack();
 }
 
 /* Calculate if the position of the chip has changed. Pass a tolerance so
@@ -52,7 +54,6 @@ void MusicChip::sendTrack(){
  *
 */
 bool MusicChip::hasPositionChanged(int tolerance, Point position){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     return ((center.x + tolerance) < position.x || (center.x - tolerance) < position.x) && ((center.y + tolerance) < position.y || (center.y - tolerance) < position.y);
 }
 
@@ -61,12 +62,10 @@ bool MusicChip::hasPositionChanged(int tolerance, Point position){
  */
 
 ColorRange MusicChip::getRange(){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     return *range;
 }
 
 int MusicChip::getContour(){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     return contour;
 }
 
@@ -76,18 +75,15 @@ QString MusicChip::getFileName(){
 }
 
 Point MusicChip::getCenter(){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     return this->center;
 }
 
 //Set center by two ints
 void MusicChip::setCenter(int x, int y){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     this->center = cv::Point(x,y);
 }
 
 //Set center by Point
 void MusicChip::setCenter(Point center){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     this->center = center;
 }

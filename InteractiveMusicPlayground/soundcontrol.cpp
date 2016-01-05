@@ -1,82 +1,60 @@
 #include "soundcontrol.h"
 
-SoundControl::SoundControl(QWidget *parent) :
-    QObject(parent)
-{
+SoundControl::SoundControl(QWidget *parent)
+    : QObject(parent) {
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
-    redPlayer = new MusicChipPlayer("RED", this);
-    bluePlayer = new MusicChipPlayer("BLUE", this);
-    greenPlayer = new MusicChipPlayer("GREEN", this);
-    yellowPlayer = new MusicChipPlayer("YELLOW", this);
-    purplePlayer = new MusicChipPlayer("PURPLE", this);
 }
 
 SoundControl::~SoundControl() {
    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
-   delete redPlayer;
-   delete greenPlayer;
-   delete bluePlayer;
-   delete yellowPlayer;
-   delete purplePlayer;
+   for(uint i = 0; i < musicChipPlayers.size(); i++){
+       delete musicChipPlayers[i];
+   }
 }
 
 void SoundControl::play(Point position){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     MusicChip* sender = qobject_cast<MusicChip*>(QObject::sender());
-    MusicChipPlayer* player = getPlayer(sender->getRange().getName());
-    if(player == 0){
-        qDebug() << "Invalid Color - no corresponding audioPlayer";
-        return;
-    }
-    player->getEffectProcessor()->setVolume(1);
-
-}
-
-
-MusicChipPlayer* SoundControl::getPlayer(QString playerName){
-    if(playerName == redPlayer->objectName()){
-        return redPlayer;
-    } else if (playerName == yellowPlayer->objectName()){
-        return yellowPlayer;
-    } else if (playerName == greenPlayer->objectName()){
-        return greenPlayer;
-    } else if (playerName == bluePlayer->objectName()){
-        return bluePlayer;
-    } else if (playerName == purplePlayer->objectName()){
-        return purplePlayer;
-    } else {
-        return 0;
-    }
+    MusicChipPlayer* player = getPlayer(sender->objectName());
+    player->getEffectProcessor()->active();
+    player->getEffectProcessor()->setChipCenter(position);
 }
 
 void SoundControl::stop(){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     MusicChip* sender = qobject_cast<MusicChip*>(QObject::sender());
-    MusicChipPlayer* player = getPlayer(sender->getRange().getName());
-    if(player == 0){
-        qDebug() << "Invalid Color - no corresponding audioPlayer";
-        return;
+    MusicChipPlayer* player = getPlayer(sender->objectName());
+    player->getEffectProcessor()->off();
+}
+
+MusicChipPlayer* SoundControl::getPlayer(QString playerName){
+    for(uint i = 0; i < musicChipPlayers.size(); i++){
+        if(playerName == musicChipPlayers[i]->objectName()){
+            return musicChipPlayers[i];
+        }
     }
-    player->getEffectProcessor()->setVolume(0);
+    qDebug() << "No player found!";
+    return 0;
 }
 
 void SoundControl::applyEffects(Point position){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
+    MusicChip* sender = qobject_cast<MusicChip*>(QObject::sender());
+    MusicChipPlayer* player = getPlayer(sender->objectName());
+    player->getEffectProcessor()->setChipCenter(position);
 }
 
-void SoundControl::setTrack(QString track){
+void SoundControl::setTrack(){
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     MusicChip* sender = qobject_cast<MusicChip*>(QObject::sender());
-    MusicChipPlayer* player = getPlayer(sender->getRange().getName());
-    if(player == 0){
-        qDebug() << "Invalid Color - no corresponding audioPlayer";
-        return;
-    }
-    player->getAudioFile()->setFileName(track);
+    MusicChipPlayer* player = new MusicChipPlayer(sender->objectName(), this);
+    musicChipPlayers.reserve(1);
+    musicChipPlayers.push_back(player);
+    player->getAudioFile()->setFileName(sender->getFileName());
     player->getAudioPlayer()->start();
 }
 
 void SoundControl::setEffects(Point e1, Point e2, Point e3, Point e4){
    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
+   for(uint i = 0; i < musicChipPlayers.size(); i++){
+        musicChipPlayers[i]->getEffectProcessor()->setEffectPositions(e1,e2,e3,e4);
+   }
 }
 

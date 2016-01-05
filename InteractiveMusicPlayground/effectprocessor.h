@@ -9,20 +9,32 @@ using namespace cv;
 
 class EffectProcessor: public AudioProcessor{
 public:
-    EffectProcessor();
+    enum State{OFF, FADEIN, ON, FADEOUT};
+    EffectProcessor(float sampleRate);
     void startProcessing(const QAudioFormat &format);
     void process(float **input, float **output, int numFrames);
     void stopProcessing();
     void setChipCenter(Point center);
-    void setVolume(float volume);
+    void active();
+    void off();
+    void setEffectPositions(Point e1, Point e2, Point e3, Point e4);
+    void setState(State state);
+
 private:
-    float volume;
+    State state;
     float gainChange;
     float gain;
+    float minGain;
+    const float MIN_GAIN_DB = -100;
+
     int x1;
+
     QAudioFormat format;
-    cv::Point chipCenter;
+    Point chipCenter;
     float calculateEffectStrength(Point effect);
+    float applyEffects(float input);
+    float dB2gain(float dB);
+    float gain2dB(float gain);
 };
 
 #endif // EFFECTPROCESSOR_H

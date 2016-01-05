@@ -8,23 +8,23 @@ ImageProcessor::ImageProcessor(SoundControl *soundControl, QObject *parent)
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     //Create the musicChips
     QString path = "C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\sounds\\";
-    MusicChip* redSquare = new MusicChip(Shapes::SQUARE,ColorRange::RED, path + "demo.mp3");
-    //MusicChip* blueSquare = new MusicChip(Shapes::SQUARE,ColorRange::BLUE, path + "120guitar.wav");
+    MusicChip* redSquare = new MusicChip(Shapes::SQUARE,ColorRange::RED, path + "truecolors.mp3");
+    MusicChip* blueSquare = new MusicChip(Shapes::SQUARE,ColorRange::PURPLE, path + "fairytale.mp3");
 
     //Put them into a vector
-    musicChips.reserve(1);
+    musicChips.reserve(2);
     musicChips.push_back(redSquare);
-    //musicChips.push_back(blueSquare);
+    musicChips.push_back(blueSquare);
 
     //Connect the SIGNALS and SLOTS
     //ImageProcessor
     QObject::connect(this, SIGNAL(declareEffectPositions(Point,Point,Point,Point)),soundControl, SLOT(setEffects(Point, Point, Point, Point)));
     //MusicChips
-    for (int i = 0; i < musicChips.size(); i++){
+    for (uint i = 0; i < musicChips.size(); i++){
         QObject::connect(musicChips[i], SIGNAL(on(Point)), soundControl, SLOT(play(Point)));
         QObject::connect(musicChips[i], SIGNAL(off()), soundControl, SLOT(stop()));
         QObject::connect(musicChips[i], SIGNAL(positionChanged(Point)), soundControl, SLOT(applyEffects(Point)));
-        QObject::connect(musicChips[i], SIGNAL(passTrack(QString)), soundControl, SLOT(setTrack(QString)));
+        QObject::connect(musicChips[i], SIGNAL(passTrack()), soundControl, SLOT(setTrack()));
     }
 }
 
@@ -36,8 +36,9 @@ void ImageProcessor::startProcessing(const VideoFormat& format){
     int y = format.frameHeight();
     emit declareEffectPositions(Point(0,0), Point(x,0), Point(0,y), Point(x,y));
 
-    for(int i = 0; i < musicChips.size(); i++){
-        //SendTrack emits passTrack with the QString containing the filepath
+    for(uint i = 0; i < musicChips.size(); i++){
+        //SendTrack emits passTrack
+        qDebug() << "Send track for chip" << i;
         musicChips[i]->sendTrack();
     }
 }
@@ -47,10 +48,9 @@ void ImageProcessor::startProcessing(const VideoFormat& format){
 //musicchip inside the vector musicChips. This way, if a musicChip gets detected,
 //audio will play
 Mat ImageProcessor::process(const Mat &input){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     Mat result = Mat::zeros(input.size(), CV_8UC1);
 
-    for(int i = 0; i < musicChips.size(); i++){
+    for(uint i = 0; i < musicChips.size(); i++){
        //First, mask the color of the input as a function of the ColorRange from the musicchip
        //Pass this result to the maskShape function which detects the shape and returns
        //a binary matrix where white pixel represent the detected musicchip
@@ -77,7 +77,6 @@ Mat ImageProcessor::process(const Mat &input){
 //Masks the input for the colorRange of the given MusicChip
 //Returns a binary matrix where every pixel within the ColorRange is white
 Mat ImageProcessor::maskColor(const Mat &input, MusicChip *musicChip){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     cvtColor(input, input, CV_BGR2HSV);
 
     if(medianBlurValue > 0){
@@ -96,10 +95,9 @@ Mat ImageProcessor::maskColor(const Mat &input, MusicChip *musicChip){
 //Returns a filled white shape on a black matrix if the shape is found
 //stops after finding the first shape
 Mat ImageProcessor::maskShape(const Mat input, MusicChip* musicChip, Point &outputCenter){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     Mat output = Mat::zeros(input.size(), CV_8UC1);
     vector<vector<Point>> contours;
-    int contour = musicChip->getContour();
+    uint contour = musicChip->getContour();
 
     if(openValue > 0){
          morphologyEx(input, input, MORPH_OPEN, element, Point(-1,-1), openValue);
@@ -110,7 +108,7 @@ Mat ImageProcessor::maskShape(const Mat input, MusicChip* musicChip, Point &outp
 
     findContours(input, contours, RETR_LIST, CV_CHAIN_APPROX_TC89_KCOS);
 
-    for(int i = 0; i < contours.size(); i++){
+    for(uint i = 0; i < contours.size(); i++){
         vector<Point> approx;
         approxPolyDP(contours[i], approx, 0.01*arcLength(contours[i], true), true);
 
@@ -136,7 +134,6 @@ Mat ImageProcessor::maskShape(const Mat input, MusicChip* musicChip, Point &outp
 }
 
 Point ImageProcessor::centerOfMass(vector<Point> contours){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     Moments m = moments(contours,true);
     return Point((int)(m.m10/m.m00),(int)(m.m01/m.m00));
 }
