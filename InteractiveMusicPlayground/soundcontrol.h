@@ -21,6 +21,7 @@ class SoundControl : public QObject
 public:
     SoundControl(QWidget *parent = 0);
     ~SoundControl();
+    void start();
 
 public slots:
     void play(Point position);
@@ -31,6 +32,7 @@ public slots:
 
 private:
     vector<MusicChipPlayer*> musicChipPlayers;
+    bool started;
     MusicChipPlayer* redPlayer;
     MusicChipPlayer* bluePlayer;
     MusicChipPlayer* greenPlayer;

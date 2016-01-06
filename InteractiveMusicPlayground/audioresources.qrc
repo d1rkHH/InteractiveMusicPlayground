@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file>resources/audio/truecolors.mp3</file>
+		<file>resources/audio/fairytale.mp3</file>
+	</qresource>
+</RCC>

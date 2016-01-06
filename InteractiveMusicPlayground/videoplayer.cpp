@@ -5,6 +5,7 @@ VideoPlayer::VideoPlayer(SoundControl *soundControl, QWidget *parent)
     , ui(new Ui::VideoPlayer)
     , videoThread(new VideoEngine)
     , imageprocessor(new ImageProcessor(soundControl))
+    , soundControl(soundControl)
 {
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     ui->setupUi(this);
@@ -126,4 +127,9 @@ void VideoPlayer::on_closingScrollbar_valueChanged(int value) {
 void VideoPlayer::on_minChipSizeScrollbar_valueChanged(int value) {
     imageprocessor->setMinChipSize(value);
     ui->minchipsize->setText(QString::number(value));
+}
+
+void VideoPlayer::on_playAudioButton_clicked()
+{
+    soundControl->start();
 }

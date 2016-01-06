@@ -7,9 +7,8 @@ ImageProcessor::ImageProcessor(SoundControl *soundControl, QObject *parent)
 {
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     //Create the musicChips
-    QString path = "C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\sounds\\";
-    MusicChip* redSquare = new MusicChip(Shapes::SQUARE,ColorRange::RED, path + "truecolors.mp3");
-    MusicChip* blueSquare = new MusicChip(Shapes::SQUARE,ColorRange::PURPLE, path + "fairytale.mp3");
+    MusicChip* redSquare = new MusicChip(Shapes::SQUARE,ColorRange::RED, PATH + "truecolors.mp3");
+    MusicChip* blueSquare = new MusicChip(Shapes::SQUARE,ColorRange::PURPLE, PATH + "fairytale.mp3");
 
     //Put them into a vector
     musicChips.reserve(2);
@@ -32,15 +31,15 @@ ImageProcessor::ImageProcessor(SoundControl *soundControl, QObject *parent)
 void ImageProcessor::startProcessing(const VideoFormat& format){
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
 
-    int x = format.frameWidth();
-    int y = format.frameHeight();
-    emit declareEffectPositions(Point(0,0), Point(x,0), Point(0,y), Point(x,y));
-
     for(uint i = 0; i < musicChips.size(); i++){
         //SendTrack emits passTrack
         qDebug() << "Send track for chip" << i;
         musicChips[i]->sendTrack();
     }
+
+    int x = format.frameWidth();
+    int y = format.frameHeight();
+    emit declareEffectPositions(Point(0,0), Point(x,0), Point(0,y), Point(x,y));
 }
 
 //Central method that gets called for every input frame. It returns a binary image

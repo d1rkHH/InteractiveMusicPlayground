@@ -40,11 +40,14 @@ private slots:
     void on_closingScrollbar_valueChanged(int value);
     //Detection Control
     void on_minChipSizeScrollbar_valueChanged(int value);
+    //Audio Control
+    void on_playAudioButton_clicked();
 
 private:
     Ui::VideoPlayer *ui;
     VideoEngine *videoThread;
     QString color;
+    SoundControl* soundControl;
     void setValueForColor(ColorRange::RangeIndex index, int value);
     void preLoadScrollBars(ColorRange range);
 

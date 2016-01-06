@@ -27,6 +27,7 @@
 *.out
 *.app
 
-build-colorkeyer-Desktop_Qt_5_5_1_MSVC2013_32bit*/
+build*/
 
-colorkeyer.pro.user.*
+*.pro.user
+*.pro.user.*

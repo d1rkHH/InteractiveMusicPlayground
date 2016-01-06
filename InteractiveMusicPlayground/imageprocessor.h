@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QDir>
+#include <QString>
 
 using namespace cv;
 
@@ -45,6 +46,8 @@ private:
     int closeValue;
     //Minimum size a shape must have to get detected
     int minChipSize;
+
+    const QString PATH = "C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\InteractiveMusicPlayground\\resources\\audio\\";
 
     Mat maskColor(const Mat &input, MusicChip *musicChip);
     Mat maskShape(const Mat input, MusicChip *musicChip, Point &outputCenter);
