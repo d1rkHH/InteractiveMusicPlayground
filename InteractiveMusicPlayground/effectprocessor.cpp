@@ -1,7 +1,6 @@
 #include "effectprocessor.h"
 #include <QDebug>
 #include <math.h>
-#include <iostream>
 EffectProcessor::EffectProcessor()
     : AudioProcessor()
     , gain(0)
@@ -14,6 +13,13 @@ EffectProcessor::EffectProcessor()
     minGain = dB2gain(MIN_GAIN_DB);
 }
 
+EffectProcessor::~EffectProcessor(){
+    delete e1;
+    delete e2;
+    delete e3;
+    delete e4;
+}
+
 float EffectProcessor::dB2gain(float dB){
     return pow(10, dB/20);
 }
@@ -22,7 +28,6 @@ float EffectProcessor::gain2dB(float gain){
 }
 
 void EffectProcessor::startProcessing(const QAudioFormat &format){
-    qDebug() << __FUNCTION__;
     this->format = format;
 }
 
@@ -35,10 +40,10 @@ void EffectProcessor::process(float **input, float **output, int numFrames){
     }
     //Never let the gain rise above 1
     gain = min(gain * gainChange, 1.0f);
-    //std::cout << "State: " << state << " Gain: " << gain << " GainChange: " << gainChange << std::endl;
 
     for(int i = 0; i < numFrames; i++){
         output[0][i] = applyEffects(input[0][i]) * gain;
+
     }
     // copy to other channels
     for(int c = 0; c < format.channelCount(); c++){
@@ -49,16 +54,43 @@ void EffectProcessor::process(float **input, float **output, int numFrames){
 }
 
 void EffectProcessor::stopProcessing(){
-    qDebug() << __FUNCTION__;
+
 }
 
 
+//Apply an effect to the audio input
+//Because apply also sets some internal values
+//it has to be called for every effect all the time
+//The difference is just which value gets returned
 float EffectProcessor::applyEffects(float input){
     Effect* effect = chooseEffect();
     float strength = calculateEffectStrength(effect->getPosition());
-    return effect->apply(input, strength);
+    if(effect == e1){
+        e2->apply(input, 0);
+        e3->apply(input, 0);
+        e4->apply(input, 0);
+        return e1->apply(input, strength);
+    } else if (effect == e2){
+        e1->apply(input, 0);
+        e3->apply(input, 0);
+        e4->apply(input, 0);
+        return e2->apply(input, strength);
+    } else if (effect == e3){
+        e1->apply(input, 0);
+        e2->apply(input, 0);
+        e4->apply(input, 0);
+        return e3->apply(input, strength);
+    } else if (effect == e4){
+        e1->apply(input, 0);
+        e2->apply(input, 0);
+        e3->apply(input, 0);
+        return e4->apply(input, strength);
+    } else {
+        return input;
+    }
 }
 
+//Choose the active effect by calculating which effect is closest to the musicchip
 Effect* EffectProcessor::chooseEffect(){
     Point tf = Point(chipCenter.x, chipCenter.y * ratio);
     double distance_e1 = norm(e1->getPosition()-tf);
@@ -67,16 +99,12 @@ Effect* EffectProcessor::chooseEffect(){
     double distance_e4 = norm(e4->getPosition()-tf);
     double min = std::min(std::min(distance_e1, distance_e2), std::min(distance_e3, distance_e4));
     if(min == distance_e2){
-        //std::cout << "e2: " << min << std::endl;
         return e2;
     } else if(min == distance_e3){
-        //std::cout << "e3: " << min << std::endl;
         return e3;
     } else if(min == distance_e4){
-        //std::cout << "e4: " << min << std::endl;
         return e4;
     } else {
-        //std::cout << "e1 (default): " << min << std::endl;
         return e1; //Default
     }
 }
@@ -87,12 +115,12 @@ void EffectProcessor::setState(State state){
         gain = 0;
         gainChange = 1;
     } else if (state == FADEIN){
-        gainChange = 1.2;
+        gainChange = 1.2f;
         //If the gain is below the minGain (Equals 0), use minGain
         //Else, use the current gain value
         gain = max(gain,minGain);
     } else if (state == FADEOUT){
-        gainChange = 0.95;
+        gainChange = 0.95f;
     } else if (state == ON){
         gain = 1;
         gainChange = 1;
@@ -126,17 +154,10 @@ float EffectProcessor::calculateEffectStrength(Point effect){
     float scaled_distance = std::min((float)(max_distance)/((float)(width)/2),1.0f);
     //Calculate the strength by this value (linear)
     //TODO: Change to logarithmic scale
-    float strength = 1 - scaled_distance;
-
-    //DEBUG
-    /*std::cout << " Effect Point (x,y)=" << effect.x << "," << effect.y
-              << " Input Point (x,y)=" << chipCenter.x << "," << chipCenter.y
-              << " Scaled Point (x,y)=" << p.x << "," << p.y
-              << " dx=" << dx << " dy=" << dy
-              << " max_distance=" << max_distance
-              << " scaled distance=" << scaled_distance
-              << " stength=" << strength << std::endl;
-    */
+    float strength = std::max(std::min(1.4*(1 - scaled_distance-0.2),1.0),0.0);
+    //alternative functions:
+    //float strength = std::min(0.75*pow(1-scaled_distance)+0.1,3),1.0);
+    //float strength = -2*pow(1-scaled_distance,3)+3.125*pow(1-scaled_distance,2)-0.042*(1-scaled_distance);
     return strength;
 }
 
@@ -149,9 +170,9 @@ void EffectProcessor::setEffectPositions(Point e1, Point e2, Point e3, Point e4)
     //After that, create Effects, but with y-Coordinate scaled up
     //so the coordinate system is proportional
     this->e1 = new HighPassEffect(Point(e1.x, e1.y*ratio));
-    this->e2 = new HighPassEffect(Point(e2.x, e2.y*ratio));
-    this->e3 = new HighPassEffect(Point(e3.x, e3.y*ratio));
-    this->e4 = new HighPassEffect(Point(e4.x, e4.y*ratio));
+    this->e2 = new LowPassEffect(Point(e2.x, e2.y*ratio));
+    this->e3 = new DelayEffect(Point(e3.x, e3.y*ratio));
+    this->e4 = new DelayEffect(Point(e4.x, e4.y*ratio));
 }
 
 void EffectProcessor::setHeight(int height){

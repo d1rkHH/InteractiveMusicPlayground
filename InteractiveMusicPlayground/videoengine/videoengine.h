@@ -20,6 +20,7 @@ public:
     void setProcessor(VideoProcessor*);
     const VideoFormat& videoFormat() const;
     int framePosition();
+    void setDisableVideoOutput(bool value);
 protected:
     void run();
 public slots:
@@ -35,6 +36,7 @@ private:
     VideoProcessor* processor;
     bool usingCamera;
     int cameraChannel;
+    bool disableVideoOutput;
 };
 
 

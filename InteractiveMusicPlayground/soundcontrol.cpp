@@ -1,22 +1,18 @@
 #include "soundcontrol.h"
 #include <iostream>
 
-SoundControl::SoundControl(QWidget *parent)
+SoundControl::SoundControl(QObject *parent)
     : QObject(parent)
-    , started(false){
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
-}
+    , started(false){}
 
 SoundControl::~SoundControl() {
-   qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
    for(uint i = 0; i < musicChipPlayers.size(); i++){
        delete musicChipPlayers[i];
    }
 }
 
-//Start audioPlayers (called when camera input is started
+//Start audioPlayers
 void SoundControl::start(){
-    std::cout << "start sound control" << std::endl;
     if(!started){
         started = true;
         for(uint i = 0; i < musicChipPlayers.size(); i++){

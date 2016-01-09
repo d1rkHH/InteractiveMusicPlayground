@@ -6,26 +6,29 @@ VideoPlayer::VideoPlayer(SoundControl *soundControl, QWidget *parent)
     , videoThread(new VideoEngine)
     , imageprocessor(new ImageProcessor(soundControl))
     , soundControl(soundControl)
+    , started(false)
 {
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     ui->setupUi(this);
     videoThread->setProcessor(imageprocessor);
+    ui->pathTextfield->setText(imageprocessor->getPath());
     connect(videoThread, SIGNAL(sendInputImage(const QImage&)), ui->inputFrame, SLOT(setImage(const QImage&)));
     connect(videoThread, SIGNAL(sendProcessedImage(const QImage&)), ui->processedFrame , SLOT(setImage(const QImage&)));
 }
 
 VideoPlayer::~VideoPlayer() {
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     delete videoThread;
     delete imageprocessor;
     delete ui;
+    delete soundControl;
 }
 
 void VideoPlayer::on_openVideoFileButton_clicked() {
-    qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     // Kamera
-    videoThread->openCamera();
-    videoThread->start();
+    if(!started){
+        started = true;
+        videoThread->openCamera();
+        videoThread->start();
+    }
 }
 
 void VideoPlayer::on_colorComboBox_currentIndexChanged(const QString &color) {
@@ -132,4 +135,26 @@ void VideoPlayer::on_minChipSizeScrollbar_valueChanged(int value) {
 void VideoPlayer::on_playAudioButton_clicked()
 {
     soundControl->start();
+}
+
+void VideoPlayer::on_detectionToleranceScrollbar_valueChanged(int value)
+{
+    imageprocessor->setDetectionTolerance(value);
+    ui->detectionTolerance->setText(QString::number(value));
+}
+
+void VideoPlayer::on_positionChangedToleranceScrollBar_valueChanged(int value)
+{
+    imageprocessor->setPositionChangedTolerance(value);
+    ui->positionChangedTolerance->setText(QString::number(value));
+}
+
+void VideoPlayer::on_pathTextfield_textChanged(const QString &path)
+{
+    imageprocessor->setPath(path);
+}
+
+void VideoPlayer::on_disableVideoOutput_stateChanged(int value)
+{
+    videoThread->setDisableVideoOutput(value);
 }

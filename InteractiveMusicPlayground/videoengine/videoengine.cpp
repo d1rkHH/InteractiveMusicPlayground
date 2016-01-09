@@ -12,6 +12,7 @@ VideoEngine::VideoEngine()
     : stopped(false)
     , processor(0)
     , usingCamera(false)
+    , disableVideoOutput(false)
 {
 }
 VideoEngine::~VideoEngine(){
@@ -23,6 +24,10 @@ const VideoFormat& VideoEngine::videoFormat() const{
 }
 void VideoEngine::setProcessor(VideoProcessor *processor){
     this->processor = processor;
+}
+
+void VideoEngine::setDisableVideoOutput(bool value){
+    this->disableVideoOutput = value;
 }
 
 void VideoEngine::openFile(const QString& file){
@@ -95,14 +100,18 @@ void VideoEngine::run()
         }
 
         // queue the image to the gui
-        emit sendInputImage(cvMatToQImage(cvFrame));
+        if(!disableVideoOutput){
+            emit sendInputImage(cvMatToQImage(cvFrame));
+        }
 
         // Process Video Frame
         if (processor != 0){
             cvFrame = processor->process(cvFrame);
         }
 
-        emit sendProcessedImage(cvMatToQImage(cvFrame));
+        if(!disableVideoOutput){
+            emit sendProcessedImage(cvMatToQImage(cvFrame));
+        }
 
         // check if stopped
         QMutexLocker locker(&mutex);

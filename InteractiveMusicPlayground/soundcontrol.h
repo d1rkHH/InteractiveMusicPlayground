@@ -1,12 +1,10 @@
 #ifndef SOUNDCONTROL_H
 #define SOUNDCONTROL_H
 
-#include <QWidget>
 #include <QDebug>
 #include "audioplayer.h"
 #include "audiofile.h"
 #include "effectprocessor.h"
-#include <QFile>
 #include <QAudioOutput>
 #include <opencv2/opencv.hpp>
 #include "musicchipplayer.h"
@@ -14,12 +12,15 @@
 
 using namespace cv;
 
+//This class is responsible for managing the sound
+//It gets called via signal/slot-mechanism from
+//the ImageProcessor.
 class SoundControl : public QObject
 {
  Q_OBJECT
 
 public:
-    SoundControl(QWidget *parent = 0);
+    SoundControl(QObject *parent = 0);
     ~SoundControl();
     void start();
 
@@ -33,11 +34,6 @@ public slots:
 private:
     vector<MusicChipPlayer*> musicChipPlayers;
     bool started;
-    MusicChipPlayer* redPlayer;
-    MusicChipPlayer* bluePlayer;
-    MusicChipPlayer* greenPlayer;
-    MusicChipPlayer* yellowPlayer;
-    MusicChipPlayer* purplePlayer;
     MusicChipPlayer* getPlayer(QString playerName);
 };
 

@@ -275,7 +275,10 @@ int AudioDecoderMediaFoundation::read(int size, const SAMPLE *destination)
             m_dead = true;
             break;
         } else if (dwFlags & MF_SOURCE_READERF_ENDOFSTREAM) {
-            std::cout << "SSMF: End of input file." << std::endl;
+            //Code-Modification @author max wiechmann
+            //If end of file, start from beginning
+            this->seek(0);
+            //std::cout << "SSMF: End of input file." << std::endl;
             break;
         } else if (dwFlags & MF_SOURCE_READERF_CURRENTMEDIATYPECHANGED) {
             std::cerr << "SSMF: Type change";

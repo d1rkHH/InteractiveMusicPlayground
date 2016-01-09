@@ -9,7 +9,10 @@ HEADERS  += ../InteractiveMusicPlayground/videoplayer.h \
     ../InteractiveMusicPlayground/colorrange.h \
     ../InteractiveMusicPlayground/imageprocessor.h \
     ../InteractiveMusicPlayground/effect.h \
-    ../InteractiveMusicPlayground/highpasseffect.h
+    ../InteractiveMusicPlayground/highpasseffect.h \
+    $$PWD/delayeffect.h \
+    $$PWD/ringbuffer.h \
+    $$PWD/lowpasseffect.h
 
 SOURCES +=  ../InteractiveMusicPlayground/videoplayer.cpp \
     ../InteractiveMusicPlayground/imageprocessor.cpp \
@@ -20,6 +23,9 @@ SOURCES +=  ../InteractiveMusicPlayground/videoplayer.cpp \
     ../InteractiveMusicPlayground/musicchipplayer.cpp \
     ../InteractiveMusicPlayground/imageprocessor.cpp \
     ../InteractiveMusicPlayground/highpasseffect.cpp \
+    $$PWD/delayeffect.cpp \
+    $$PWD/ringbuffer.cpp \
+    $$PWD/lowpasseffect.cpp
 
 FORMS    += ../InteractiveMusicPlayground/videoplayer.ui
 

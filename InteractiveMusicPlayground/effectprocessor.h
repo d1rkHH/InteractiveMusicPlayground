@@ -6,13 +6,20 @@
 #include <opencv2/opencv.hpp>
 #include "effect.h"
 #include "highpasseffect.h"
+#include "delayeffect.h"
+#include "lowpasseffect.h"
 
 using namespace cv;
 
+//Every MusicChip has one instance of an EffectProcessor attached to the AudioPlayer
+//This class is responsible for applying different effects at different strengths
+//to the audio
 class EffectProcessor: public AudioProcessor{
 public:
+    //Enum for keeping track of the current state the audiotrack is in
     enum State{OFF, FADEIN, ON, FADEOUT};
     EffectProcessor();
+    ~EffectProcessor();
     void startProcessing(const QAudioFormat &format);
     void process(float **input, float **output, int numFrames);
     void stopProcessing();

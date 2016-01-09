@@ -1,10 +1,10 @@
 #include "colorrange.h"
 
-ColorRange ColorRange::YELLOW = ColorRange(Scalar(14,130,0), Scalar(32,255,255), "YELLOW");
-ColorRange ColorRange::GREEN = ColorRange(Scalar(40,20,0), Scalar(75,255,255), "GREEN");
-ColorRange ColorRange::RED = ColorRange(Scalar(0,50,0), Scalar(15,255,255), "RED");
-ColorRange ColorRange::BLUE = ColorRange(Scalar(95,50,0), Scalar(105,255,255), "BLUE");
-ColorRange ColorRange::PURPLE = ColorRange(Scalar(109,60,0), Scalar(130,255,255), "PURPLE");
+ColorRange ColorRange::RED = ColorRange(Scalar(170,120,50), Scalar(10,255,255), "RED");
+ColorRange ColorRange::YELLOW = ColorRange(Scalar(15,100,170), Scalar(30,170,255), "YELLOW");
+ColorRange ColorRange::GREEN = ColorRange(Scalar(60,30,40), Scalar(90,150,200), "GREEN");
+ColorRange ColorRange::BLUE = ColorRange(Scalar(100,20,20), Scalar(115,150,200), "BLUE");
+ColorRange ColorRange::PURPLE = ColorRange(Scalar(120,15,30), Scalar(140,200,200), "PURPLE");
 
 ColorRange::ColorRange(Scalar min, Scalar max, QString name){
     this->min = min;

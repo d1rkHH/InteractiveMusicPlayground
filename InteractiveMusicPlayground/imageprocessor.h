@@ -21,6 +21,7 @@ class ImageProcessor :  public QObject, public VideoProcessor
 
 public:
     ImageProcessor(SoundControl * soundControl, QObject* parent = 0);
+    ~ImageProcessor();
     void startProcessing(const VideoFormat& format);
     Mat process(const Mat&source);
     //Setter
@@ -28,6 +29,10 @@ public:
     void setOpenValue(int value);
     void setCloseValue(int value);
     void setMinChipSize(int value);
+    void setDetectionTolerance(int value);
+    void setPositionChangedTolerance(int value);
+    void setPath(QString path);
+    QString getPath();
 
 signals:
     //Signal to communicate where the 4 points for the effects will be
@@ -46,8 +51,12 @@ private:
     int closeValue;
     //Minimum size a shape must have to get detected
     int minChipSize;
-
-    const QString PATH = "C:\\Users\\Besitzer\\Programming\\cpp\\AVPRG\\InteractiveMusicPlayground\\InteractiveMusicPlayground\\resources\\audio\\";
+    //Number of frames a chip can be undetected without audio stopping
+    int detectionTolerance;
+    //Number of pixels a chip has to move until it gets registered as moving
+    int positionChangedTolerance;
+    //Path to where the resources are saved
+    QString path;
 
     Mat maskColor(const Mat &input, MusicChip *musicChip);
     Mat maskShape(const Mat input, MusicChip *musicChip, Point &outputCenter);
