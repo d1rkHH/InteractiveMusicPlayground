@@ -1,5 +1,11 @@
 # Interactive Music Playground
 
+![Interactive Music Playground](http://i.imgur.com/3tiTlWm.jpg)
+
 Der **Interactive Music Playground** ist eine C++ Applikation, die mit *openCV* farbige Bausteine erkennt und dann zu den Bausteinen entsprechende Audiotracks abspielt. Verschieben der Bausteine (**Music Chips**) im Raum sorgt für die Anwendung verschiedene Soundeffekte auf den Audiotrack, wie Hoch-/Tiefpassfilter und Delay. 
 
+![I(nteractive) M(usic) P(playground)](http://i.imgur.com/SAWqXL1.jpg)
+
 Der Interactive Music Playground ist so konzipiert, dass jeder mit einer Kamera und einem Rechner ihn selbst nachbauen kann. Alles, was er dazu machen muss, ist, sich farbige Bausteine selbst zu bauen (z.B. auszudrucken oder aus Moosgummi oder Holz zu basteln). Perspektivisch soll die Applikation auf dem Smartphone laufen und die interne Kamera nutzen, um noch zugänglicher zu sein.
+
+![Music Chips](http://imgur.com/qIg811W.jpg)
