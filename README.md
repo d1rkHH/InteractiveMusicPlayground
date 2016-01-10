@@ -18,5 +18,5 @@ Da es sich beim Interactive Music Playground um eine **Tangible Sound Control** 
 
 Sind alle Image Processing Einstellungen getroffen, kann mit **Start Audio** das Abspielen des Sounds starten. Der Interactive Music Playground ist so konzipiert, dass jeder Music Chip einem kleinen, geloopten Audiosample entspricht. So kann ein MusicChip z.B. einem Bass oder einem Schlagzeug entsprechen. Nun können beliebig Music Chips in die Kamerafläche gelegt werden, und es kann *interaktiv* **DJ** gespielt werden. Zur Laufzeitoptimierung kann der Videooutput mittels Checkbox **Disable Video Output** gestoppt werden.
 
-![UML IMP](http://i.imgur.com/lxcMbGl.png)
+![UML IMP](http://i.imgur.com/WSB9sD8.png)
 Hier eine vereinfachte Darstellung der Projektstruktur als **UML-Diagramm**. (Erstellt mit www.draw.io)
