@@ -10,7 +10,7 @@ LowPassEffect::LowPassEffect(Point position)
 }
 
 float LowPassEffect::apply(float input, float strength){
-    float output = (input + lastInput + lastInput2)/3;
+    float output = strength * ((input + lastInput + lastInput2)/3) + (1-strength) * input;
     lastInput2 = lastInput;
     lastInput = input;
     return output;

@@ -16,7 +16,6 @@ void SoundControl::start(){
     if(!started){
         started = true;
         for(uint i = 0; i < musicChipPlayers.size(); i++){
-            std::cout << "start player" << i << endl;
             musicChipPlayers[i]->getAudioPlayer()->start();
         }
     }

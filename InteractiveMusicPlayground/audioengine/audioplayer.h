@@ -20,6 +20,8 @@ public:
     const QAudioFormat& format()const;
     void setAudioSource(AudioSource* audioSource);
     void setAudioProcessor(AudioProcessor* audioProcessor);
+    AudioProcessor* getAudioProcessor();
+    AudioSource* getAudioSource();
 public:
     // implement QIODevice
     qint64 readData(char *data, qint64 maxlen);

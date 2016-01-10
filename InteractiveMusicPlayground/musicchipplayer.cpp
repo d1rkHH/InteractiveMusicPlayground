@@ -4,16 +4,12 @@ MusicChipPlayer::MusicChipPlayer(QString objectName, QObject *parent) : QObject(
 {
     this->setObjectName(objectName);
     this->player = new AudioPlayer(this);
-    this->file = new AudioFile();
-    this->processor = new EffectProcessor();
-    this->player->setAudioSource(file);
-    this->player->setAudioProcessor(processor);
+    this->player->setAudioSource(new AudioFile());
+    this->player->setAudioProcessor(new EffectProcessor());
 }
 
 MusicChipPlayer::~MusicChipPlayer(){
     delete player;
-    delete file;
-    delete processor;
 }
 
 AudioPlayer* MusicChipPlayer::getAudioPlayer(){
@@ -21,9 +17,9 @@ AudioPlayer* MusicChipPlayer::getAudioPlayer(){
 }
 
 AudioFile* MusicChipPlayer::getAudioFile(){
-    return this->file;
+    return static_cast<AudioFile*>(this->player->getAudioSource());
 }
 
 EffectProcessor* MusicChipPlayer::getEffectProcessor(){
-    return this->processor;
+    return static_cast<EffectProcessor*>(this->player->getAudioProcessor());
 }

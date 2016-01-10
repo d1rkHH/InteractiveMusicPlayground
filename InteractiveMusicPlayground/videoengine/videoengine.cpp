@@ -26,6 +26,10 @@ void VideoEngine::setProcessor(VideoProcessor *processor){
     this->processor = processor;
 }
 
+VideoProcessor* VideoEngine::getVideoProcessor(){
+    return this->processor;
+}
+
 void VideoEngine::setDisableVideoOutput(bool value){
     this->disableVideoOutput = value;
 }

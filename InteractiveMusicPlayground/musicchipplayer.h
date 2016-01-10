@@ -6,9 +6,9 @@
 #include "audiofile.h"
 #include "effectprocessor.h"
 
-//This class represents a combination of AudioPlayer,
-//AudioFile and EffectProcessor for each musicChip
-//Does not contain any logic
+//This class is a wrapper for the AudioPlayer
+//to handle the effectprocessor and audiofile
+//easily
 class MusicChipPlayer : public QObject
 {
     Q_OBJECT
@@ -20,8 +20,6 @@ public:
     EffectProcessor* getEffectProcessor();
 private:
     AudioPlayer* player;
-    AudioFile* file;
-    EffectProcessor* processor;
 };
 
 #endif // MUSICCHIPPLAYER_H

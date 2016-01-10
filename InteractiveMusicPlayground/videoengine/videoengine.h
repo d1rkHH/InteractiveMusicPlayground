@@ -18,6 +18,7 @@ public:
     void openFile(const QString& file);
     void openCamera(int device = 0, int channel = 0);
     void setProcessor(VideoProcessor*);
+    VideoProcessor* getVideoProcessor();
     const VideoFormat& videoFormat() const;
     int framePosition();
     void setDisableVideoOutput(bool value);

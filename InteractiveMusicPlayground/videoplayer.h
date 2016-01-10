@@ -20,7 +20,6 @@ class VideoPlayer : public QMainWindow
 
 public:
     explicit VideoPlayer(SoundControl* soundControl, QWidget *parent = 0);
-    ImageProcessor* imageprocessor;
     ~VideoPlayer();
 
 private slots:
