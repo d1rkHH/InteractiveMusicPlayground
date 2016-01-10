@@ -17,7 +17,7 @@ HighPassEffect::HighPassEffect(Point position)
  * the input will get returned
  */
 float HighPassEffect::apply(float input, float strength){
-    lastOutput = 0.9 * (lastOutput + input - lastInput);
+    lastOutput = 0.9f * (lastOutput + input - lastInput);
     float output = lastOutput * strength + input * (1-strength);
     lastInput = input;
     return output;
