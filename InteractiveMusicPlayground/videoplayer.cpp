@@ -4,20 +4,19 @@ VideoPlayer::VideoPlayer(SoundControl *soundControl, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::VideoPlayer)
     , videoThread(new VideoEngine)
-    , imageprocessor(new ImageProcessor(soundControl))
     , soundControl(soundControl)
     , started(false)
 {
     ui->setupUi(this);
-    videoThread->setProcessor(imageprocessor);
-    ui->pathTextfield->setText(imageprocessor->getPath());
+    ImageProcessor * processor = new ImageProcessor(soundControl);
+    videoThread->setProcessor(processor);
+    ui->pathTextfield->setText(processor->getPath());
     connect(videoThread, SIGNAL(sendInputImage(const QImage&)), ui->inputFrame, SLOT(setImage(const QImage&)));
     connect(videoThread, SIGNAL(sendProcessedImage(const QImage&)), ui->processedFrame , SLOT(setImage(const QImage&)));
 }
 
 VideoPlayer::~VideoPlayer() {
     delete videoThread;
-    delete imageprocessor;
     delete ui;
     delete soundControl;
 }
@@ -102,33 +101,34 @@ void VideoPlayer::on_maxValScrollbar_valueChanged(int value) {
 //Set the MedianBlur in imageprocessor. This method only allows values
 //accepted by the medianBlur method from OpenCV
 void VideoPlayer::on_medianBlurScrollbar_valueChanged(int value) {
+    ImageProcessor* p = static_cast<ImageProcessor*>(videoThread->getVideoProcessor());
     int newvalue = 0;
     if(value < 2){
-        imageprocessor->setMedianBlurValue(0);
+        p->setMedianBlurValue(0);
     } else if(value % 2 == 0){
         newvalue = value + 1;
-        imageprocessor->setMedianBlurValue(value + 1);
+        p->setMedianBlurValue(value + 1);
         ui->medianBlurScrollbar->setValue(value+1);
     } else {
         newvalue = value;
-        imageprocessor->setMedianBlurValue(value);
+        p->setMedianBlurValue(value);
         ui->medianBlurScrollbar->setValue(value);
     }
     ui->medianblur->setText(QString::number(newvalue));
 }
 
 void VideoPlayer::on_openingScrollbar_valueChanged(int value) {
-    imageprocessor->setOpenValue(value);
+    static_cast<ImageProcessor*>(videoThread->getVideoProcessor())->setOpenValue(value);
     ui->opening->setText(QString::number(value));
 }
 
 void VideoPlayer::on_closingScrollbar_valueChanged(int value) {
-    imageprocessor->setCloseValue(value);
+    static_cast<ImageProcessor*>(videoThread->getVideoProcessor())->setCloseValue(value);
     ui->closing->setText(QString::number(value));
 }
 
 void VideoPlayer::on_minChipSizeScrollbar_valueChanged(int value) {
-    imageprocessor->setMinChipSize(value);
+    static_cast<ImageProcessor*>(videoThread->getVideoProcessor())->setMinChipSize(value);
     ui->minchipsize->setText(QString::number(value));
 }
 
@@ -139,19 +139,19 @@ void VideoPlayer::on_playAudioButton_clicked()
 
 void VideoPlayer::on_detectionToleranceScrollbar_valueChanged(int value)
 {
-    imageprocessor->setDetectionTolerance(value);
+    static_cast<ImageProcessor*>(videoThread->getVideoProcessor())->setDetectionTolerance(value);
     ui->detectionTolerance->setText(QString::number(value));
 }
 
 void VideoPlayer::on_positionChangedToleranceScrollBar_valueChanged(int value)
 {
-    imageprocessor->setPositionChangedTolerance(value);
+    static_cast<ImageProcessor*>(videoThread->getVideoProcessor())->setPositionChangedTolerance(value);
     ui->positionChangedTolerance->setText(QString::number(value));
 }
 
 void VideoPlayer::on_pathTextfield_textChanged(const QString &path)
 {
-    imageprocessor->setPath(path);
+    static_cast<ImageProcessor*>(videoThread->getVideoProcessor())->setPath(path);
 }
 
 void VideoPlayer::on_disableVideoOutput_stateChanged(int value)

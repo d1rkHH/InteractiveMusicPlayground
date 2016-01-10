@@ -120,3 +120,11 @@ qint64 AudioPlayer::bytesAvailable()const{
     qDebug() << "Thread: " << this->thread() << " " << __FUNCTION__;
     return audioFormat.bytesForFrames(available - audioBufferPos);
 }
+
+AudioSource* AudioPlayer::getAudioSource(){
+    return this->audioSource;
+}
+
+AudioProcessor* AudioPlayer::getAudioProcessor(){
+    return this->audioProcessor;
+}
